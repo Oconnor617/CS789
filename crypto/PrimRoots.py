@@ -123,7 +123,7 @@ def findPrimefactors(s, n) :
  
 # Function to find smallest primitive
 # root of n
-def findPrimitive( n) :
+def findPrimitive(n) :
     s = set()
  
     # Check if n is prime or not

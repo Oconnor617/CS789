@@ -1,5 +1,6 @@
 from werkzeug.utils import redirect
 from crypto import app
+from crypto.ElGamal import key_gen
 from crypto.Euclidean import GCD, power
 from crypto.Exponentiation import *
 from crypto.Helpers import *
@@ -146,3 +147,25 @@ def elEnc():
         #Call the ElGamal Script to generate the Keys and encrypt the message
         return redirect(url_for('index'))
     return render_template('index') #GET Request
+
+
+@app.route('/elKeyGen', methods=['GET','POST'])
+def elKeyGen():
+    if request.method == 'POST':
+        p = int(request.form['keygroup'])
+        print('The Modulus is: {}'.format(p))
+        keys = key_gen(p) #should return a dictionary
+        pri = keys['PrivateKey']
+        pub = keys['PublicKey']
+        pubB = pub.get_b()
+        pubH = pub.get_h()
+        pubP = pub.get_p()
+        print(pri)
+        print(pub.get_h())
+        #print(keys)
+        #print(keys.values())
+        #print(keys['PublicKey'].get_p)
+        #Call the ElGamal Script to generate the Keys and encrypt the message
+        #return redirect(url_for('index'))
+        return render_template('elGamalEnc.html', p=pubP, b=pubB, h=pubH)
+    return render_template('elGamalEnc.html') #GET Request
