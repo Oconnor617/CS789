@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+        input{
+            border:1px solid #a9a9a9;
+            height:34px;
+            line-height:34px;
+            width:550px;
+            margin-bottom:20px;
+            padding-left:5px;
+        }
+
+        form{
+          text-align: center;
+        }
+        </style>
+    </head>
+     <div>
+          <form id="GCD" method="post" action="{{ url_for('gcd') }}">
+              <label for="GCD_M"></label><br>
+              <input type="number" id="GCD_M" name="GCD_M" placeholder="Enter M"><br>
+              <label for="GCD_N"></label><br>
+              <input type="number" id="GCD_N" name="GCD_N" placeholder="Enter N"><br>
+              <input type="submit" value="Submit GCD">
+          </form>
+     </div>
+
+     <div>
+        <form id="ModInverse" method="post" action="{{ url_for('modInverse') }}">
+            <label for="Number"></label><br>
+            <input type="number" id="num" name="num" placeholder="Enter a Number"><br>
+            <label for="mod"></label><br>
+            <input type="number" id="mod" name="mod" placeholder="Enter the Modulous"><br>
+            <input type="submit" value="Submit Inverse">
+        </form>
+   </div>
+
+
+   <div>
+    <form id="FastExpoMod" method="post" action="{{ url_for('fastExpo') }}">
+        <label for="Number"></label><br>
+        <input type="number" id="x" name="x" placeholder="Enter a Number"><br>
+        <label for="Exponent"></label><br>
+        <input type="number" id="e" name="e" placeholder="Enter the Exponent"><br>
+        <label for="mod"></label><br>
+        <input type="number" id="modExpo" name="modExpo" placeholder="Enter the Modulous"><br>
+        <input type="submit" value="Submit FastExpoMod">
+    </form>
+    </div>
+
+   <div>
+    <form id="prime" method="post" action="{{ url_for('prime') }}">
+        <label for="prime"></label><br>
+        <input type="number" id="prime" name="n" placeholder="Enter a Number to see if it is Prime"><br>
+        <input type="submit" value="Check Prime">
+    </form>
+    </div>
+
+    <div>
+        <form id="primeFactor" method="post" action="{{ url_for('primeFactorRoute') }}">
+            <label for="primeFactor"></label><br>
+            <input type="number" id="prime" name="nFactor" placeholder="Enter a Number for Prime Factorization"><br>
+            <input type="submit" value="Check Prime Factor">
+        </form>
+    </div>
+
+    <div>
+        <form id="Size"r method="post" action="{{ url_for('size') }}">
+            <label for="size"></label><br>
+            <input type="number" id="Zsize" name="n" placeholder="Enter a Number: Output = size of the multiplicative group"><br>
+            <input type="submit" value="Check size">
+        </form>
+    </div>
+
+    <div>
+        <form id="Log" method="post" action="{{ url_for('log') }}">
+            <label for="x"></label><br>
+            <input type="number" id="x" name="x" placeholder="Enter a Number"><br>
+            <label for="Base"></label><br>
+            <input type="number" id="base" name="base" placeholder="Enter the Base"><br>
+            <input type="submit" value="Submit Log">
+        </form>
+   </div>
+
+   <div>
+    <form id="myT"r method="post" action="{{ url_for('roots') }}">
+        <label for="ross"></label><br>
+        <input type="number" id="troots" name="nroots" placeholder="Enter a Number: Output will be the smallest Primitive Root"><br>
+        <input type="submit" value="Check roots">
+    </form>
+    </div>
+
+    <div>
+        <form id="BabyStep" method="post" action="{{ url_for('baby') }}">
+            <label for="x"></label><br>
+            <input type="number" id="xbaby" name="babyx" placeholder="Enter a Number that is a Generator or base"><br>
+            <label for="Base"></label><br>
+            <input type="number" id="baseBaby" name="babybase" placeholder="Enter the solution"><br>
+            <label for="Mod"></label><br>
+            <input type="number" id="babyMod" name="babyMod" placeholder="Enter the Modulus"><br>
+            <input type="submit" value="Submit Baby">
+        </form>
+   </div>
+
+   <div>
+    <form id="Moddy" method="post" action="{{ url_for('modEasy') }}">
+        <label for="theNum"></label><br>
+        <input type="number" id="nums" name="nums" placeholder="Enter a Number"><br>
+        <label for="Moddy"></label><br>
+        <input type="number" id="moddy" name="moddy" placeholder="Enter the Modulus"><br>
+        <input type="submit" value="Submit Easy Mod">
+    </form>
+</div>
+
+<div>
+    <form id="Alice" method="post" action="{{ url_for('elEnc') }}">
+        <label for="Message to Encrypt"></label><br>
+        <input type="text" id="message" name="message" placeholder="Enter the Message that you want to Encrypt">
+        <input type="submit" value="Submit Message for Encryption">
+        <p id="msg"></p><br>
+        <p id="mod"></p><br>
+        <p id="key_pub"></p><br>
+        <p id="key_pri"></p><br>
+        <p id="msg_enc"></p><br>
+    </form>
+</div>
+
+
+
+</html>
