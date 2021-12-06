@@ -45,8 +45,13 @@
       <input type="submit" value="Generate Keys">
     </form>
     {% if p %}
-    <p id="P">The Mod is : {{ p }}</p>
-    <p id="Key">The Public Key is: ({{ p }}, {{ b }}, {{ h }})</p>
+    <p>
+      The Public Key for Alice is: ({{ b }}, {{ h }}, {{ p }})<br>
+      The Private Key for Alice is is: {{ r }}
+    </p><br>
+    <p>The Public Key for Bob is: ({{ bb }}, {{ hb }}, {{ pb }})<br>
+      The Private Key for Bob is is: {{ l }}
+    </p>
     {% endif %}
     </div>
 
@@ -55,14 +60,34 @@
         <form id="Alice" method="post" action="{{ url_for('elEnc') }}">
             <label for="Message to Encrypt"></label><br>
             <input type="text" id="message" name="message" placeholder="Enter the Message that you want to Encrypt">
+            <input type="number" id="pub_bob" name="pub_bob" placeholder="Enter the Public Key of the Reciever: h=b^l(modp)">
+            <input type="number" id="generator" name="generator" placeholder="Enter the Generator: b">
+            <input type="number" id="pri_A" name="pri_A" placeholder="Enter the Private Key of the Sender: r">
+            <input type="number" id="group" name="group" placeholder="Enter the Group: p">
             <input type="submit" value="Submit Message for Encryption">
-            <p id="msg"></p><br>
-            <p id="mod"></p><br>
-            <p id="key_pub"></p><br>
+            {% if msg %}
+            <p id="msg">The Message is: {{ msg }}</p><br>
+            <p id="mod">The group is: {{ mod }}</p><br>
+            <p id="key_pub">Bob's Public Key (b^l) is: {{ pub_bob }}</p><br>
             <p id="key_pri"></p><br>
-            <p id="msg_enc"></p><br>
+            <p id="msg_enc">The Encrypted Message is: {{ msg_enc }}</p><br>
+            {% endif %}
         </form>
     </div>
 
+    <div>
+        <form id="BoB" method="post" action="{{ url_for('elDec') }}">
+          <label for="Enter the Encrypted Message for Decription"></label><br>
+          <input type="text" id="msg_enc" name="msg_enc" placeholder="Enter the Encrypted Message">
+          <input type="number" id="pub_alice" name="pub_alice" placeholder="Enter the Public Key of the Sender: h=b^r(modp)">
+          <input type="number" id="pri_B" name="pri_B" placeholder="Enter the Private Key of the Reciever: l">
+          <input type="number" id="g" name="g" placeholder="Enter the Group: p">
+          <input type="submit" value="Submit Message for Decryption">
+        </form>
+        {% if msg_enc %}
+        <p>The Encrypted Message is: {{ msg_enc }}</p><br>
+        <p>The Decrypted Message is: {{ msg_dec }}</p><br>
+        {% endif %}
+    </div>
   </body>
 </html>

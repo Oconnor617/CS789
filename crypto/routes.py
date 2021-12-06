@@ -1,6 +1,6 @@
 from werkzeug.utils import redirect
 from crypto import app
-from crypto.ElGamal import key_gen
+from crypto.ElGamal import key_gen, encrypt, decrypt
 from crypto.Euclidean import GCD, power
 from crypto.Exponentiation import *
 from crypto.Helpers import *
@@ -143,29 +143,59 @@ def baby():
 def elEnc():
     if request.method == 'POST':
         msg = request.form['message']
-        print(msg)
+        pkb = int(request.form['pub_bob'])
+        b = int(request.form['generator'])
+        pri_A = int(request.form['pri_A'])
+        group = int(request.form['group'])
+        print("This is in routes. The message is {} ".format(msg))
+        print("Bob Public: {}".format(pkb))
+        print("Generator: {}".format(b))
+        print("Alice Private Key: {}".format(pri_A))
+        print("Group used: {}".format(group))
+        enc = encrypt(msg,pkb,pri_A,group) # Should return an encrypted message
         #Call the ElGamal Script to generate the Keys and encrypt the message
-        return redirect(url_for('index'))
-    return render_template('index') #GET Request
+        return render_template('elGamalEnc.html', msg=msg, mod=group, pub_bob=pkb, msg_enc=enc)
+    return render_template('elGamalEnc.html') #GET Request
 
+@app.route('/elDec', methods=['GET','POST'])
+def elDec():
+    if request.method == 'POST':
+        msg_enc = request.form['msg_enc'] #Will be a string of multiple numbers
+        split = msg_enc.split(" ")
+        print(type(split))
+        print(split)
+        split = list(map(int, split)) #Map the string elsements to Ints
+        print(split)
+        pka = int(request.form['pub_alice'])
+        pri_B = int(request.form['pri_B'])
+        p = int(request.form['g'])
+        dec = decrypt(split,pka,pri_B,p)
+        #dec = decrypt(msg_enc,pka,pri_B,p)
+        return render_template('elGamalEnc.html', msg_enc=msg_enc,msg_dec=dec)
+    return render_template('elGamalEnc.html') #GET Request
 
 @app.route('/elKeyGen', methods=['GET','POST'])
 def elKeyGen():
     if request.method == 'POST':
         p = int(request.form['keygroup'])
         print('The Modulus is: {}'.format(p))
-        keys = key_gen(p) #should return a dictionary
-        pri = keys['PrivateKey']
-        pub = keys['PublicKey']
-        pubB = pub.get_b()
-        pubH = pub.get_h()
-        pubP = pub.get_p()
-        print(pri)
-        print(pub.get_h())
+        keys_A = key_gen(p) #should return a dictionary
+        pri_A = keys_A['PrivateKey']
+        pub_A = keys_A['PublicKey']
+        pubB = pub_A.get_b()
+        pubH = pub_A.get_h()
+        pubP = pub_A.get_p()
+        priA = pri_A.get_r()
+        print(pri_A)
+        print(pub_A.get_h())
+        keys_B = key_gen(p) #Keys for Bob
+        bob_pri = keys_B['PrivateKey']
+        bob_pub = keys_B['PublicKey']
+        bobB, bobH, bobP, bobL = bob_pub.get_b(), bob_pub.get_h(), bob_pub.get_p(), bob_pri.get_r() # The Key info for Bob
         #print(keys)
         #print(keys.values())
         #print(keys['PublicKey'].get_p)
         #Call the ElGamal Script to generate the Keys and encrypt the message
         #return redirect(url_for('index'))
-        return render_template('elGamalEnc.html', p=pubP, b=pubB, h=pubH)
+        return render_template('elGamalEnc.html', p=pubP, b=pubB, h=pubH, r=priA, bb=bobB, pb=bobP, hb=bobH, l=bobL)
     return render_template('elGamalEnc.html') #GET Request

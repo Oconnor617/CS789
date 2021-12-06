@@ -69,29 +69,47 @@ def key_gen(p):
     private = PrivateKey(p,b,r)
     return {'PublicKey': public, 'PrivateKey': private}
 
-def gen_key(p):
-    """This function will be used to generate private and public keys for Alice and Bob
-        It will take a large number which has a cyclic group as input and use that as the basis
-        to generate key based on n and random integers
+def encrypt(msg,pkb,r,p):
+    """ This will function will have a few parameters
+        msg: A plain text message that Alice wants to encrypt & send to Bob
+        pkb: Bob's public key which will be used for the encryption. pkb will consist of:
+            p: A group chosen by both parties and agreed upon
+            b: a primitive root of p
+            h: h=b^l(modp) only bob knows l but Alice will use h to encrypt the message with
+        r: Alice's private key
     """
-    key = random.randint(pow(10,20),p) #Generate a random key between 10^20 and n
-    #for now we use Pythons built in Random until we make out own Random Int Algorithm
-    while GCD(p,key) != 1:
-        # if we are here then the GCD of n and the random key is not 1. So no Inverse in n. So choose a new one
-        key = random.randint(pow(10,20),p)
+    en_msg = [] # we are going to encrypt the plaintext letter by letter so have an empty array
+    print(len(msg))
+    print(type(msg))
+    for i in range(0,(len(msg))):
+        print(i)
+        en_msg.append(msg[i]) # A loop to add the message letter by letter to the array
+    print("test")
+    print(en_msg)
+    #pkb gives us h=b^l which and we want to compute s=b^lr - use Fast Exponentiation
+    s = FastModExo(pkb,r,p) # s should be b^lr
+    print("b^l used: {}".format(pkb))
+    print("b^rl used: {}".format(s))
+    for i in range(0, len(en_msg)):
+        en_msg[i] = s * ord(en_msg[i]) # ord will return the int ASCII representation of each char
+    return en_msg
 
-    return key # Return this key becasue it must have an inverse in Zn
-
-def encrypt(msg,n):
-    """A function to encrypt a message. It will take a message to encrypt, 
-        n: the random number to be used to genreate the keys
-        g: a random int between 2 and n which is an element of Zn
-        h: g^a(modn) where a is a samll random int probably use 3 - use Fast Modular Exponentiation
-        This will return an encrypted message as well as a value p where
-        p: g^k(modn) where k is the private key of the sender.
-    """
-    a = 3 #might change this later
-    k = gen_key(n) # a new private key for the person encrypting this meassage
-    g = random.randint(2,n)
-    h = FastModExo(g,k,n)
+def decrypt(enc_msg, pka, l, p):
+    """This function will be used for decryption. It will have a few input parameters
+    enc_msg: An encrypted message that was made using the public key associated with the private key l
+    l: the private key associated with the public key used to encrypt the message
+    pka: The public key of the person who encryped and sent the message
+    p: the group used as the basis for the generator and the modulus"""
+    dr_msg = [] #We will use this array to decrypt the message letter by letter
+    #pka gives us b^r and we want b^rl for decryption - Fast Exponentiation
+    s = FastModExo(pka,l,p) # s should be b^rl
+    print("b^r used: {}".format(pka))
+    print("b^lr used: {}".format(s))
+    #dec = int(enc_msg/s) #In reality change this to a loop to handle this letter by letter
+    #print("Decrypted message is: {}".format(dec))
+    #return dec
+    for i in range (0, len(enc_msg)):
+        dr_msg.append(chr(int(enc_msg[i]/s))) #decrypt each char one at a time and add it
+    print("From here the message should be {}".format(dr_msg))
+    return dr_msg
 
