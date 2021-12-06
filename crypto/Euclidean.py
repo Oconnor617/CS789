@@ -50,18 +50,19 @@ def power(x,y,m):
     else:
         return ((x*p)%m)
 
-"""
-print("starting a few trials now")
-GCD(1000,10)
-print("The GDC is: {}".format(GCD(1000,10)))
-GCD(150,9)
-print()
-GCD(31,2)
-print("Another. GDC is: {}" .format(GCD(150,304)))
-print("Let's see what's happening with extended")
-#print("The values are {} = {} * m35 * + {} * n15".format(ExtendedGDC(35,15)))
-print(ExtendedGDC(30,50))
-gcd, x, y = ExtendedGDC(30, 50)
-print("The GCD is", gcd)
-print(f"x = {x}, y = {y}")
-"""
+def egcd(a, b):
+    """Another recursive implementation of the Extented GCD Algorithm to find the inverse"""
+    if a == 0:
+        return b, 0, 1
+    else:
+        g, y, x = egcd(b % a, a)
+        return g, x - (b // a) * y, y
+
+
+def modinv(a, m):
+    
+    g, x, y = egcd(a, m)
+    if g != 1:
+        raise Exception('modular inverse does not exist')
+    else:
+        return x % m
