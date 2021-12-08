@@ -1,5 +1,6 @@
 # Python3 program to find primitive root
 # of a given number n
+from math import gcd as bltin_gcd
 """1- Euler Totient Function phi = n-1 [Assuming n is prime]
 1- Find all prime factors of phi.
 2- Calculate all powers to be calculated further 
@@ -160,3 +161,31 @@ def findPrimitive(n) :
  
     # If no primitive root found
     return -1
+
+def primRootsNP(modulo):
+    """Only 1,2,4 and numbers of the form p^k and 2p^k (where p is an odd prime) have Primitive Roots"""
+    required_set = {num for num in range(1, modulo) if bltin_gcd(num, modulo) }
+    return [g for g in range(1, modulo) if required_set == {pow(g, powers, modulo)
+            for powers in range(1, modulo)}]
+
+def primRoots(theNum):
+    """make sure only to use this if the number is Prime. This algorithm also gets pretty slow for large Primes so it is probably best just to use 
+    findPrimitive() above which will return the first i.e smallest Primitive root for the Encryption/Decryption. Since any Primitive Root will do just fine for Encrypting/Decryptin
+    it makes the most sense from a time perspective just to go with the smallest root"""
+
+    if(isPrime(theNum) == False):
+        #This means it is not Prime "We shoud use PRIME"
+        return primRootsNP(theNum)
+    o = 1
+    roots = []
+    r = 2
+    while r < theNum:
+        k = pow(r, o, theNum)
+        while (k > 1):
+            o = o + 1
+            k = (k * r) % theNum
+        if o == (theNum - 1):
+            roots.append(r)
+        o = 1
+        r = r + 1
+    return roots

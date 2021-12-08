@@ -4,18 +4,6 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Thomas O'Connor CS789 ElGamal Encription and Decription</title>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <!-- <script src="jquery-3.5.1.min.js"></script> -->
-    <script>
-        $(document).ready(function(){
-        //Select the P element on hover and do CSS to it
-            $("#myP").hover(function(){//get myP
-                $(this).css("background-color", "yellow");//When you first start to hover change to yellow
-                }, function(){
-                $(this).css("background-color", "purple"); //change it back once you leave
-            });
-        });// end JQuery function
-    </script>
         <style>
               input{
                   border:1px solid #a9a9a9;
@@ -29,15 +17,18 @@
               form{
                 text-align: center;
               }
+              div{
+                text-align: center;
+              }
         </style>
   </head>
   <body>
 
     <div>
       <h1>Complete the form below to generate your Public and Private Key</h1>
-      <h3>A Public Key is of the form: (p,b,h) where 
-        p: A group chosen by both parties and agreed upon
-        b: a primitive root of p
+      <h3>A Public Key is of the form: (p,b,h) where <br> 
+        p: A group chosen by both parties and agreed upon<br>
+        b: a primitive root of p<br>
         h: h=b^r(modp) -> r is a secret random number that is chosen during the key generation phase</h3>
       <form id="KeyGen" method="post" action="{{ url_for('elKeyGen') }}">
       <label for="Enter the Group"></label><br>
@@ -48,22 +39,40 @@
     <p>
       The Public Key for Alice is: ({{ b }}, {{ h }}, {{ p }})<br>
       The Private Key for Alice is is: {{ r }}
-    </p><br>
+    </p>
     <p>The Public Key for Bob is: ({{ bb }}, {{ hb }}, {{ pb }})<br>
       The Private Key for Bob is is: {{ l }}
     </p>
     {% endif %}
     </div>
 
-    <p id="myP">Hover over this to change it with JQuery</p>
     <div>
+      <h1>Complete the form below to generate your Public and Private Key if you know the Primitive Root</h1>
+  
+      <form id="KeyGenRoot" method="post" action="{{ url_for('elKeyGenRoot') }}">
+      <label for="Enter the Group"></label><br>
+      <input type="number" id="keygroupRoot" name="keygroupRoot" placeholder="Enter the Large Number">
+      <label for="Enter the Primitive Root to use"></label><br>
+      <input type="number" id="Root" name="Root" placeholder="Enter the Primitive Root"><br>
+      <input type="submit" value="Generate Keys Root">
+    </form>
+    {% if pR %}
+    <p>
+      The Public Key for Alice is: ({{ bR }}, {{ hR }}, {{ pR }})<br>
+      The Private Key for Alice is is: {{ rR }}
+    </p><br>
+    {% endif %}
+    </div>
+
+    <div>
+        <h1>Complete this form below if you want to Encrypt a String</h1>
         <form id="Alice" method="post" action="{{ url_for('elEnc') }}">
             <label for="Message to Encrypt"></label><br>
             <input type="text" id="message" name="message" placeholder="Enter the Message that you want to Encrypt">
             <input type="number" id="pub_bob" name="pub_bob" placeholder="Enter the Public Key of the Reciever: h=b^l(modp)">
             <input type="number" id="generator" name="generator" placeholder="Enter the Generator: b">
             <input type="number" id="pri_A" name="pri_A" placeholder="Enter the Private Key of the Sender: r">
-            <input type="number" id="group" name="group" placeholder="Enter the Group: p">
+            <input type="number" id="group" name="group" placeholder="Enter the Group: p"><br>
             <input type="submit" value="Submit Message for Encryption">
             {% if msg %}
             <p id="msg">The Message is: {{ msg }}</p><br>
@@ -76,18 +85,55 @@
     </div>
 
     <div>
-        <form id="BoB" method="post" action="{{ url_for('elDec') }}">
-          <label for="Enter the Encrypted Message for Decription"></label><br>
-          <input type="text" id="msg_enc" name="msg_enc" placeholder="Enter the Encrypted Message">
-          <input type="number" id="pub_alice" name="pub_alice" placeholder="Enter the Public Key of the Sender: h=b^r(modp)">
-          <input type="number" id="pri_B" name="pri_B" placeholder="Enter the Private Key of the Reciever: l">
-          <input type="number" id="g" name="g" placeholder="Enter the Group: p">
-          <input type="submit" value="Submit Message for Decryption">
-        </form>
-        {% if msg_enc %}
-        <p>The Encrypted Message is: {{ msg_enc }}</p><br>
-        <p>The Decrypted Message is: {{ msg_dec }}</p><br>
-        {% endif %}
-    </div>
+      <h1>Complete this form below if you want to Decrypt a list where each entry represents a letter in a string</h1>
+      <form id="BoB" method="post" action="{{ url_for('elDec') }}">
+        <label for="Enter the Encrypted Message for Decription"></label><br>
+        <input type="text" id="msg_enc" name="msg_enc" placeholder="Enter the Encrypted Message">
+        <input type="number" id="pub_alice" name="pub_alice" placeholder="Enter the Public Key of the Sender: h=b^r(modp)">
+        <input type="number" id="pri_B" name="pri_B" placeholder="Enter the Private Key of the Reciever: l">
+        <input type="number" id="g" name="g" placeholder="Enter the Group: p"><br>
+        <input type="submit" value="Submit Message for Decryption">
+      </form>
+      {% if msg_enc %}
+      <p>The Encrypted Message is: {{ msg_enc }}</p><br>
+      <p>The Decrypted Message is: {{ msg_dec }}</p><br>
+      {% endif %}
+  </div>
+
+
+    <div>
+      <h1>Complete this form below if you want to Encrypt a number</h1>
+      <form id="Alice_num" method="post" action="{{ url_for('elEncNum') }}">
+          <label for="Number to Encrypt"></label><br>
+          <input type="number" id="NumMessage" name="NumMessage" placeholder="Enter the Number that you want to Encrypt">
+          <input type="number" id="pub_bob_num" name="pub_bob_num" placeholder="Enter the Public Key of the Reciever: h=b^l(modp)">
+          <input type="number" id="generator_num" name="generator_num" placeholder="Enter the Generator: b">
+          <input type="number" id="pri_A_num" name="pri_A_num" placeholder="Enter the Private Key of the Sender: r">
+          <input type="number" id="group_num" name="group_num" placeholder="Enter the Group: p"><br>
+          <input type="submit" value="Submit Number for Encryption">
+          {% if num %}
+          <p id="msg">The Message is: {{ num }}</p><br>
+          <p id="mod">The group is: {{ mod_num }}</p><br>
+          <p id="key_pub">Bob's Public Key (b^l) is: {{ pub_bob_num }}</p><br>
+          <p id="key_pri"></p><br>
+          <p id="msg_enc">The Encrypted Message is: {{ num_enc }}</p><br>
+          {% endif %}
+      </form>
+  </div>
+
+    <div>
+      <h1>Complete this form below if you want to Decrypt a number</h1>
+      <form id="BoB_num" method="post" action="{{ url_for('elDecNum') }}">
+        <label for="Enter the Encrypted Number for Decription"></label><br>
+        <input type="num" id="num_enc" name="num_enc" placeholder="Enter the Encrypted Number">
+        <input type="number" id="pub_alice_num" name="pub_alice_num" placeholder="Enter the Public Key of the Sender: h=b^r(modp)">
+        <input type="number" id="pri_B_num" name="pri_B_num" placeholder="Enter the Private Key of the Reciever: l">
+        <input type="number" id="g_num" name="g_num" placeholder="Enter the Group: p"><br>
+        <input type="submit" value="Submit Number for Decryption">
+      </form>
+      {% if num_enc %}
+      <p>The Encrypted Message is: {{ num_enc }}</p><br>
+      <p>The Decrypted Message is: {{ num_dec }}</p><br>
+      {% endif %}
   </body>
 </html>

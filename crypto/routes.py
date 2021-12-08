@@ -1,6 +1,6 @@
 from werkzeug.utils import redirect
 from crypto import app
-from crypto.ElGamal import key_gen, encrypt, decrypt
+from crypto.ElGamal import key_gen, encrypt, decrypt, key_gen_root, encrypt_num, decrypt_num
 from crypto.Euclidean import GCD, power
 from crypto.Exponentiation import *
 from crypto.Helpers import *
@@ -78,6 +78,13 @@ def roots():
         return redirect(url_for('index'))
     return render_template('index')
 
+@app.route('/rootsList', methods=['GET', 'POST'])
+def rootsList():
+    if request.method == 'POST':
+        modulo = int(request.form['listroots'])
+        print("The Primitive Roots are: {}".format(primRoots(modulo)))
+        return redirect(url_for('index'))
+    return render_template('index')
 
 @app.route('/prime', methods=['GET', 'POST'])
 def prime():
@@ -139,6 +146,9 @@ def baby():
         return redirect(url_for('index'))
     return render_template('index')# GET Request
 
+#####################################################################################
+# Routes for performing ElGamal Encryption/Decryption on Strings
+#####################################################################################
 @app.route('/elEnc', methods=['GET','POST'])
 def elEnc():
     if request.method == 'POST':
@@ -174,6 +184,42 @@ def elDec():
         return render_template('elGamalEnc.html', msg_enc=msg_enc,msg_dec=dec)
     return render_template('elGamalEnc.html') #GET Request
 
+###################################################################################
+# Routes for performing ElGamal Encryption/Decryption on Numbers
+###################################################################################
+@app.route('/elEncNum', methods=['GET','POST'])
+def elEncNum():
+    if request.method == 'POST':
+        x = int(request.form['NumMessage'])
+        pkb = int(request.form['pub_bob_num'])
+        b = int(request.form['generator_num'])
+        pri_A = int(request.form['pri_A_num'])
+        group = int(request.form['group_num'])
+        print("This is in routes. The message is {} ".format(x))
+        print("Bob Public: {}".format(pkb))
+        print("Generator: {}".format(b))
+        print("Alice Private Key: {}".format(pri_A))
+        print("Group used: {}".format(group))
+        enc = encrypt_num(x,pkb,pri_A,group) # Should return an encrypted message
+        #Call the ElGamal Script to generate the Keys and encrypt the message
+        return render_template('elGamalEnc.html', num=x, mod_num=group, pub_bob_num=pkb, num_enc=enc)
+    return render_template('elGamalEnc.html') #GET Request
+
+@app.route('/elDecNum', methods=['GET','POST'])
+def elDecNum():
+    if request.method == 'POST':
+        num_enc = int(request.form['num_enc']) #Will be a number
+        pka = int(request.form['pub_alice_num'])
+        pri_B = int(request.form['pri_B_num'])
+        p = int(request.form['g_num'])
+        dec = decrypt_num(num_enc,pka,pri_B,p)
+        #dec = decrypt(msg_enc,pka,pri_B,p)
+        return render_template('elGamalEnc.html', num_enc=num_enc,num_dec=dec)
+    return render_template('elGamalEnc.html') #GET Request
+###########################################################################
+# Routes for ElGamal Key Generation
+###########################################################################
+
 @app.route('/elKeyGen', methods=['GET','POST'])
 def elKeyGen():
     if request.method == 'POST':
@@ -199,3 +245,32 @@ def elKeyGen():
         #return redirect(url_for('index'))
         return render_template('elGamalEnc.html', p=pubP, b=pubB, h=pubH, r=priA, bb=bobB, pb=bobP, hb=bobH, l=bobL)
     return render_template('elGamalEnc.html') #GET Request
+
+@app.route('/elKeyGenRoot', methods=['GET','POST'])
+def elKeyGenRoot():
+    """Used if you already know a Primitive Root you want to use"""
+    if request.method == 'POST':
+        p = int(request.form['keygroupRoot'])
+        b = int(request.form['Root'])
+        print('The Modulus is: {}'.format(p))
+        print('The Root is: {}'.format(b))
+        keys_A = key_gen_root(p,b) #should return a dictionary
+        pri_A = keys_A['PrivateKey']
+        pub_A = keys_A['PublicKey']
+        pubB = pub_A.get_b()
+        pubH = pub_A.get_h()
+        pubP = pub_A.get_p()
+        priA = pri_A.get_r()
+        print(pri_A)
+        print(pub_A.get_h())
+        keys_B = key_gen_root(p,b) #Keys for Bob
+        bob_pri = keys_B['PrivateKey']
+        bob_pub = keys_B['PublicKey']
+        bobB, bobH, bobP, bobL = bob_pub.get_b(), bob_pub.get_h(), bob_pub.get_p(), bob_pri.get_r() # The Key info for Bob
+        return render_template('elGamalEnc.html', pR=pubP, bR=pubB, hR=pubH, rR=priA)
+    return render_template('elGamalEnc.html') #GET Request
+
+@app.route('/rsa', methods=['GET','POST'])
+def rsa():
+    print("In RSA")
+    return render_template('index')# GET Request

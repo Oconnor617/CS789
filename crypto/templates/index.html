@@ -87,12 +87,20 @@
    </div>
 
    <div>
-    <form id="myT"r method="post" action="{{ url_for('roots') }}">
+    <form id="myT" method="post" action="{{ url_for('roots') }}">
         <label for="ross"></label><br>
         <input type="number" id="troots" name="nroots" placeholder="Enter a Number: Output will be the smallest Primitive Root"><br>
         <input type="submit" value="Check roots">
     </form>
     </div>
+
+    <div>
+        <form id="myPrime" method="post" action="{{ url_for('rootsList') }}">
+            <label for="RootsList"></label><br>
+            <input type="number" id="listroots" name="listroots" placeholder="Enter a Number: Output will be a list of the Primitive Roots"><br>
+            <input type="submit" value="Find roots">
+        </form>
+        </div>
 
     <div>
         <form id="BabyStep" method="post" action="{{ url_for('baby') }}">
