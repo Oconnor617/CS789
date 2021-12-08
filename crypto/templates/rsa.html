@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Thomas O'Connor CS789 RSA Encription and Decription</title>
+        <style>
+              input{
+                  border:1px solid #a9a9a9;
+                  height:34px;
+                  line-height:34px;
+                  width:550px;
+                  margin-bottom:20px;
+                  padding-left:5px;
+              }
+      
+              form{
+                text-align: center;
+              }
+        </style>
+  </head>
+  <body>
+
+    <div>
+      <h1>Complete the form below to generate your RSA Encryption and Decyption Key</h1>
+      <h3>Keys are in the form of Encryption E(e,n), Decryption (d,n) where: 
+        p: A lagge Prime Number
+        q: A large Prime Number such that p!=q
+        n: n=p*q
+        phi: Euler's Totient Function phi(n)=(p-1)(q-1) - since p&q are prime
+        e: Encryption Key a number reletively prime to n
+        d: Decryption Key a number that is the inverse of e in Zn</h3>
+      <form id="KeyGen" method="post" action="{{ url_for('elKeyGen') }}">
+      <label for="Enter the Group"></label><br>
+      <input type="number" id="keygroup" name="keygroup" placeholder="Enter the Large Number">
+      <input type="submit" value="Generate Keys">
+    </form>
+    {% if e %}
+    <p>
+      Your Encryption Key is:  ({{ e }}, {{ n }})<br>
+      Your Decryption Key is:  ({{ d }}, {{ n }})
+    </p><br>
+    {% endif %}
+    </div>
+
+    <div>
+        <form id="RSA" method="post" action="{{ url_for('rsa') }}">
+            <label for="Message to Encrypt"></label><br>
+            <input type="text" id="rsa_msg" name="rsa_msg" placeholder="Enter the Message that you want to Encrypt">
+            <input type="number" id="p1" name="p1" placeholder="Enter first Prime: p">
+            <input type="number" id="q1" name="q1" placeholder="Enter the second Prime: q">
+            <input type="submit" value="Submit to generate the keys">
+            {% if rsa_msg %}
+            <p id="msg">The Message is: {{ rsa_msg }}</p><br>
+            <p id="mod">The group is: {{ mod }}</p><br>
+            <p id="key_pub">Bob's Public Key (b^l) is: {{ pub_bob }}</p><br>
+            <p id="key_pri"></p><br>
+            <p id="msg_enc">The Encrypted Message is: {{ msg_enc }}</p><br>
+            {% endif %}
+        </form>
+    </div>
+
+
+  </body>
+</html>
