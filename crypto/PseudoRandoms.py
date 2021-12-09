@@ -1,4 +1,5 @@
 import random
+import math
 """THis module wll contain code for generating Pseudo Random Numbers and implement a Miller-Rabin Primality Test algorithm
 to test the primality of those numbers. The random prime numbers generated can then be used for the El Gamal Encryption and
 The RSA Encryption. This will also provide an update to my isPrime() function which will now use the Miller-Rabin algorthm to test
@@ -82,7 +83,7 @@ def miller_rabin(n):
             return False"""
     return True #it "passed" all 8 runs so it must be Prime
 
-def gen_random_prime(size=1000):
+def gen_random_prime(size=100000):
     """This should genreate and return a random Prime number. It basis for deteriming Primality is the MillerRabin test"""
     while True: # an Infinite Loop!
         rand = random.randrange(size)

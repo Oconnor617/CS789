@@ -9,6 +9,8 @@ from flask import render_template, request, flash, url_for
 from crypto.PrimRoots import *
 import math
 
+from crypto.RSA import rsa_keys
+
 @app.route('/')
 @app.route('/index')
 def index():
@@ -277,7 +279,41 @@ def elKeyGenRoot():
         return render_template('elGamalEnc.html', pR=pubP, bR=pubB, hR=pubH, rR=priA)
     return render_template('elGamalEnc.html') #GET Request
 
-@app.route('/rsa', methods=['GET','POST'])
-def rsa():
+@app.route('/rsa_gen', methods=['GET','POST'])
+def rsa_gen():
     print("In RSA")
-    return render_template('index')# GET Request
+    if request.method == 'POST':
+        p = int(request.form['p1check'])
+        q = int(request.form['q1check'])
+        if not (isPrimeMR(p) and isPrimeMR(q)):
+            print("both p and q must be prime")
+            return render_template('rsa.html')
+        #can safely assume the p & q entered are Prime
+        keys = rsa_keys(p,q)
+        e,d,n = keys["EncKey"].get_e(),keys["DecKey"].get_d(),keys["EncKey"].get_n()
+        print("In RoutesRSA: ")
+        print("Public Key: ({},{})".format(e,n))
+        print("Private Key: ({},{})".format(d,n))
+        return render_template('rsa.html', e=e,d=d,n=n)
+    return render_template('rsa.html')# GET Request
+
+@app.route('/rsa_gen_random', methods=['GET','POST'])
+def rsa_gen_random():
+    print("In RSA Random")
+    if request.method == 'POST':
+        p = gen_random_prime()
+        q = gen_random_prime()
+        keys = rsa_keys(p,q)
+        e,d,n = keys["EncKey"].get_e(),keys["DecKey"].get_d(),keys["EncKey"].get_n()
+        return render_template('rsa.html', e=e,d=d,n=n)
+    return render_template('rsa.html')# GET Request
+
+
+@app.route('/rsa_enc', methods=['GET','POST'])
+def rsa_enc():
+    print("In RSA Encryption")
+    if request.method == 'POST':
+        print("POST")
+        return render_template('rsa.html')
+    return render_template('rsa.html')# GET Request
+
