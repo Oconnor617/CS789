@@ -124,18 +124,16 @@
     </form>
 </div>
 
-<div>
-    <form id="Alice" method="post" action="{{ url_for('elEnc') }}">
-        <label for="Message to Encrypt"></label><br>
-        <input type="text" id="message" name="message" placeholder="Enter the Message that you want to Encrypt">
-        <input type="submit" value="Submit Message for Encryption">
-        <p id="msg"></p><br>
-        <p id="mod"></p><br>
-        <p id="key_pub"></p><br>
-        <p id="key_pri"></p><br>
-        <p id="msg_enc"></p><br>
-    </form>
-</div>
+
+    <div>
+        <form id="randPrime" method="post" action="{{ url_for('randP') }}">
+            <input type="submit" value="Submit For a Random Prime">
+            {% if rand %}
+            <p>The Random Prime is: {{ rand }}</p><br>
+            {% endif %}
+        </form>
+    </div>
+
 
 {% endblock %}
 </html>

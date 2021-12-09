@@ -4,6 +4,7 @@ from crypto.ElGamal import key_gen, encrypt, decrypt, key_gen_root, encrypt_num,
 from crypto.Euclidean import GCD, power
 from crypto.Exponentiation import *
 from crypto.Helpers import *
+from crypto.PseudoRandoms import *
 from flask import render_template, request, flash, url_for
 from crypto.PrimRoots import *
 import math
@@ -146,6 +147,12 @@ def baby():
         return redirect(url_for('index'))
     return render_template('index')# GET Request
 
+@app.route('/randP', methods=['GET', 'POST'])
+def randP():
+    if request.method == 'POST':
+        rand = gen_random_prime()
+        return render_template('index.html', rand=rand)
+    return render_template('index.html')# GET Request
 #####################################################################################
 # Routes for performing ElGamal Encryption/Decryption on Strings
 #####################################################################################
