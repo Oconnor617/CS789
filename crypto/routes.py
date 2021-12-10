@@ -282,6 +282,9 @@ def elKeyGenRoot():
         bobB, bobH, bobP, bobL = bob_pub.get_b(), bob_pub.get_h(), bob_pub.get_p(), bob_pri.get_r() # The Key info for Bob
         return render_template('elGamalEnc.html', pR=pubP, bR=pubB, hR=pubH, rR=priA)
     return render_template('elGamalEnc.html') #GET Request
+###########################################################################
+# Routes for RSA Key Generation - Either given p&q or randomlly generate prime p&q
+###########################################################################
 
 @app.route('/rsa_gen', methods=['GET','POST'])
 def rsa_gen():
@@ -312,6 +315,9 @@ def rsa_gen_random():
         return render_template('rsa.html', e=e,d=d,n=n)
     return render_template('rsa.html')# GET Request
 
+###########################################################################
+# Routes for RSA Encryption/Decryption of Numbers
+###########################################################################
 
 @app.route('/rsa_enc_view', methods=['GET','POST'])
 def rsa_enc_view():
