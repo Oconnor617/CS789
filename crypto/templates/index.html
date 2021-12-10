@@ -14,7 +14,7 @@
             padding-left:5px;
         }
 
-        form{
+        form, p, h3{
           text-align: center;
         }
         </style>
@@ -36,11 +36,17 @@
             <label for="mod"></label><br>
             <input type="number" id="mod" name="mod" placeholder="Enter the Modulous"><br>
             <input type="submit" value="Submit Inverse">
+            {% if nummy %}
+            <p>
+                The multiplicative inverse of {{ nummy }} under {{ moddy }} is: {{ anwser }}<br>
+            </p><br>
+            {% endif %}
         </form>
    </div>
 
 
    <div>
+       <h3>Complete This form below to perform Fast Modular Exponentiation</h3>
     <form id="FastExpoMod" method="post" action="{{ url_for('fastExpo') }}">
         <label for="Number"></label><br>
         <input type="number" id="x" name="x" placeholder="Enter a Number"><br>
@@ -49,18 +55,30 @@
         <label for="mod"></label><br>
         <input type="number" id="modExpo" name="modExpo" placeholder="Enter the Modulous"><br>
         <input type="submit" value="Submit FastExpoMod">
+        {% if xx %}
+        <p>
+            {{xx}} ^ {{ee}} mod {{mm}} is: {{remainder}}<br>
+        </p><br>
+        {% endif %}
     </form>
     </div>
 
    <div>
+       <h3>Complete this form below to see if a nummber is Prime (now with Miller Rabin Test!)</h3>
     <form id="prime" method="post" action="{{ url_for('prime') }}">
         <label for="prime"></label><br>
         <input type="number" id="prime" name="n" placeholder="Enter a Number to see if it is Prime"><br>
         <input type="submit" value="Check Prime">
+        {% if pis %}
+        <p>
+          Is {{pis}} Prime:  {{ res }}<br>
+        </p><br>
+        {% endif %}
     </form>
     </div>
 
     <div>
+        <h3>Complete the form below to Generate the Prime Factorization of the number</h3>
         <form id="primeFactor" method="post" action="{{ url_for('primeFactorRoute') }}">
             <label for="primeFactor"></label><br>
             <input type="number" id="prime" name="nFactor" placeholder="Enter a Number for Prime Factorization"><br>
@@ -69,10 +87,16 @@
     </div>
 
     <div>
+        <h3>Enter a number to see the size of it's Multiplicative Group</h3>
         <form id="Size"r method="post" action="{{ url_for('size') }}">
             <label for="size"></label><br>
             <input type="number" id="Zsize" name="n" placeholder="Enter a Number: Output = size of the multiplicative group"><br>
             <input type="submit" value="Check size">
+            {% if size %}
+            <p>
+              The size of that group is:  {{ size }}<br>
+            </p><br>
+            {% endif %}
         </form>
     </div>
 
@@ -87,10 +111,16 @@
    </div>
 
    <div>
+       <h3>Enter a Number to calculate its smallest Primitive Root (if it exists)</h3>
     <form id="myT" method="post" action="{{ url_for('roots') }}">
         <label for="ross"></label><br>
         <input type="number" id="troots" name="nroots" placeholder="Enter a Number: Output will be the smallest Primitive Root"><br>
         <input type="submit" value="Check roots">
+        {% if small %}
+        <p>
+          The smalles Primitive Root is :{{ small }}<br>
+        </p><br>
+        {% endif %}
     </form>
     </div>
 
@@ -115,6 +145,7 @@
    </div>
 
    <div>
+       <h3>Complete this form to find the remainder (i.e computes a%b)</h3>
     <form id="Moddy" method="post" action="{{ url_for('modEasy') }}">
         <label for="theNum"></label><br>
         <input type="number" id="nums" name="nums" placeholder="Enter a Number"><br>

@@ -1,7 +1,8 @@
 """This module wll contain code for performin RSA Encryption and Decryption based on user input. It will be passed two large Prime numbers and from there it will
 crate Encryption and Dercryption Keys. """
-from crypto.Exponentiation import isPrime
-from crypto.Euclidean import GCD, power, egcd, modinv
+from crypto.Exponentiation import FastModExo
+from crypto.Euclidean import GCD, egcd, modinv
+from crypto.PseudoRandoms import isPrimeMR
 import random
 
 class RSAEncKey:
@@ -39,7 +40,7 @@ class RSADecKey:
 def rsa_keys(p,q):
     """This function will take tow large primes (p & q such that p!=q) as inputs and generate RSA Encryption/Decryption Keys based upon that."""
     #make sure the inputs are Prime - if not that would reall mess this all up
-    """if isPrime(p) or isPrime(q):
+    """if isPrimeMR(p) or isPrimeMR(q):
        raise ValueError("The two numbers must be Prime!")
     elif p == q:
         raise ValueError("p and q cannot be the same number")
@@ -71,4 +72,21 @@ def rsa_keys(p,q):
     decryption_key = RSADecKey(d,n)
     return {'EncKey': encryption_key, 'DecKey': decryption_key}
 
-    
+def rsa_enc(num,e,n):
+    """This is the encryption function for RSA encryption. Since my group is passing encrypted numbers this function will currently only work for encrypting/decrypting numbers
+    Not letters or characters. It will have three parameters
+    e: The sender's Encryption Key
+    n: The product of the two primes p & q
+    num: The number to be encrypted""" 
+    enc = FastModExo(num,e,n) #should be num^e(modn)
+    return enc
+
+def rsa_dec(num_enc,d,n):
+    """This is the encryption function for RSA encryption. Since my group is passing encrypted numbers this function will currently only work for encrypting/decrypting numbers
+    Not letters or characters. It will have three parameters
+    d: The reciever's Decryption Key: This should be the inverse of e in modn
+    n: The product of the two primes p & q
+    num_enc: The encrypted number to be decrypted""" 
+    dec = FastModExo(num_enc,d,n) # should be (num^e)^d=(num)^ed=num since e & d should be inverses modn
+    print(dec)
+    return dec

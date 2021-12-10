@@ -1,4 +1,4 @@
-from crypto.Euclidean import GCD, power
+from crypto.Euclidean import GCD
 from crypto.Exponentiation import FastModExo
 import random
 from math import pow

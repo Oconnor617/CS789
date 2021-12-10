@@ -1,5 +1,8 @@
 <!doctype html>
 <html lang="en">
+  {% extends "base.html" %}
+
+  {% block content %}
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -14,7 +17,7 @@
                   padding-left:5px;
               }
       
-              form{
+              form,p,h1,h3{
                 text-align: center;
               }
         </style>
@@ -32,7 +35,7 @@
         d: Decryption Key a number that is the inverse of e in Zn</h3>
       <form id="GenN" method="post" action="{{ url_for('rsa_gen') }}">
       <label for="Enter two numbers to check if they are prime and can be used for RSA"></label><br>
-      <input type="number" id="p1check" name="p1check" placeholder="Enter first Prime: p">
+      <input type="number" id="p1check" name="p1check" placeholder="Enter first Prime: p"><br>
       <input type="number" id="q1check" name="q1check" placeholder="Enter the second Prime: q"><br>
       <input type="submit" value="Submit to generate the keys"><br>
     </form>
@@ -48,21 +51,37 @@
     </div>
 
     <div>
-        <form id="RSA" method="post" action="{{ url_for('rsa_enc') }}">
-            <label for="Message to Encrypt"></label><br>
-            <input type="text" id="rsa_msg" name="rsa_msg" placeholder="Enter the Message that you want to Encrypt">
-            <input type="number" id="p1" name="p1" placeholder="Enter first Prime: p">
-            <input type="number" id="q1" name="q1" placeholder="Enter the second Prime: q">
-            <input type="submit" value="Submit to generate the keys">
-            {% if e %}
+        <form id="RSAEnc" method="post" action="{{ url_for('rsa_enc_view') }}">
+            <label for="Number to Encrypt"></label><br>
+            <input type="number" id="rsa_num_enc" name="rsa_num_enc" placeholder="Enter the Number that you want to Encrypt"><br>
+            <input type="number" id="e_enc" name="e_enc" placeholder="Enter your encryption key: e"><br>
+            <input type="number" id="n_enc" name="n_enc" placeholder="Enter n:"><br>
+            <input type="submit" value="Submit to Encrypt The message">
+            {% if e_enc %}
             <p>
-              Your Encryption Key is:  ({{ e }}, {{ n }})<br>
-              Your Decryption Key is:  ({{ d }}, {{ n }})
+              Your Encryption Key is:  ({{ e_enc }}, {{ n_enc }})<br>
+              Your Encrypted message is:  {{ rsa_enc }}
             </p><br>
             {% endif %}
         </form>
     </div>
 
+    <div>
+      <form id="RSADec" method="post" action="{{ url_for('rsa_dec_view') }}">
+          <label for="Number to Decrypt"></label><br>
+          <input type="number" id="rsa_num_dec" name="rsa_num_dec" placeholder="Enter the Number that you want to Decrypt"><br>
+          <input type="number" id="d_dec" name="d_dec" placeholder="Enter your decryption key: d"><br>
+          <input type="number" id="n_dec" name="n_dec" placeholder="Enter n:"><br>
+          <input type="submit" value="Submit to Decrypt The message">
+          {% if d_dec %}
+          <p>
+            Your Decryption Key is:  ({{ d_dec }}, {{ n_dec }})<br>
+            Your Decrypted message is:  {{ rsa_dec }}
+          </p><br>
+          {% endif %}
+      </form>
+  </div>
 
   </body>
+  {% endblock %}
 </html>

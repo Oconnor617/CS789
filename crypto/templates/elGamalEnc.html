@@ -1,5 +1,8 @@
 <!doctype html>
 <html lang="en">
+  {% extends "base.html" %}
+
+  {% block content %}
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -136,4 +139,5 @@
       <p>The Decrypted Message is: {{ num_dec }}</p><br>
       {% endif %}
   </body>
+  {% endblock %}
 </html>

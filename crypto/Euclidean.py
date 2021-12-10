@@ -23,7 +23,8 @@ def GCD(m,n):
 def ExtendedGDC(m,n):
     """This is the Extended Euclidean Algorithm. It will take two integers m,n and find two integers x,y such that
     the equation x*m + y*n yeilds the smallest possible positive integer that is equal to the gcd(m,n) i.e
-    x*m + y*n = gdc(m,n)."""
+    x*m + y*n = gdc(m,n).
+    This one is for printing out the steps along the way for the midterm."""
     if m == 0: #basecase
         print("Base: n={} x={} y={}".format(n,0,1)) #You are going to get to the base case and use it on the way back up to build the final x,y
         return n, 0, 1 #return a touple
@@ -37,21 +38,10 @@ def ExtendedGDC(m,n):
         return gcd,x,y
         #return gcd, y1 -(n // m) *x1,x1
 
-def power(x,y,m):
-    """Essentially this is an iterative function to find the modular inverse of a number. This one will only be used if we have already
-    verified that the two numbers a and m are coPrime i.e GCD(a,m) = 1. That means that a multiplicative inverse exists under m and this function
-    will return it. THis will compute x^y under modulo m """
-    if (y==0):
-        return 1
-    p = power(x,y//2,m) % m
-    p = (p * p) % m
-    if (y % 2 == 0):
-        return p
-    else:
-        return ((x*p)%m)
-
 def egcd(a, b):
-    """Another recursive implementation of the Extented GCD Algorithm to find the inverse"""
+    """Another recursive implementation of the Extented GCD Algorithm to find the inverse. It will take two integers a,b and find two integers x,y such that
+    the equation x*a + y*b yeilds the smallest possible positive integer that is equal to the gcd(a,b) i.e
+    x*m + y*n = gdc(a,b)."""
     if a == 0:
         return b, 0, 1
     else:
@@ -60,7 +50,7 @@ def egcd(a, b):
 
 
 def modinv(a, m):
-    
+    """A function for calculating the Modular Inverse of a number under Modulus m. This makes use of the E"""
     g, x, y = egcd(a, m)
     if g != 1:
         raise Exception('modular inverse does not exist')

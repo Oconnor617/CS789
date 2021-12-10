@@ -55,6 +55,7 @@ then (am)(p−1)/d≡(ap−1)m/d≡1modp, so we need d=1). By the way, this is e
 For example, 6^2=36 or 6^15≡686 are not primitive roots of 761 because gcd(2,760)=2>1 and gcd(15,760)=5>1, 
 but, for example, 6^3=216 is another primitive root of 761."""
 from math import sqrt
+
  
 # Returns True if n is prime
 def isPrime( n):

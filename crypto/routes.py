@@ -1,7 +1,7 @@
 from werkzeug.utils import redirect
 from crypto import app
 from crypto.ElGamal import key_gen, encrypt, decrypt, key_gen_root, encrypt_num, decrypt_num
-from crypto.Euclidean import GCD, power
+from crypto.Euclidean import *
 from crypto.Exponentiation import *
 from crypto.Helpers import *
 from crypto.PseudoRandoms import *
@@ -9,7 +9,7 @@ from flask import render_template, request, flash, url_for
 from crypto.PrimRoots import *
 import math
 
-from crypto.RSA import rsa_keys
+from crypto.RSA import rsa_keys, rsa_enc, rsa_dec
 
 @app.route('/')
 @app.route('/index')
@@ -36,17 +36,19 @@ def gcd():
 @app.route('/modInverse', methods=['GET', 'POST'])
 def modInverse():
     if request.method == 'POST':
-        num = int(request.form['num'])
-        mod = int(request.form['mod'])
-        print('Num: {} Mod: {}'.format(num,mod))
-        g = GCD(num,mod)# find the GCD of the numbers. It will need to be 1 for this to work
+        nummy = int(request.form['num'])
+        moddy = int(request.form['mod'])
+        print('Num: {} Mod: {}'.format(nummy,moddy))
+        g = GCD(nummy,moddy)# find the GCD of the numbers. It will need to be 1 for this to work
         if (g != 1):
             #if we are here it means the two numbers are Not relativly prime
+            anwser = "Non Existant"
             print("There is no Multiplicative Inverse for those numbers")
-            return redirect(url_for('index'))
+            return render_template('index.html', nummy=nummy,moddy=moddy,anwser=anwser)
         else:
-            print("The multiplicative inverse of {} under {} is: {}".format(num,mod,power(num, mod-2, mod)))
-            return redirect(url_for('index'))
+            anwser = modinv(nummy,moddy)
+            print("The multiplicative inverse of {} under {} is: {}".format(nummy,moddy,anwser))
+            return render_template('index.html', nummy=nummy,moddy=moddy,anwser=anwser)
     else: 
         return render_template('index') # its a GET request. no form submitted
 
@@ -70,8 +72,8 @@ def fastExpo():
         mod = int(request.form['modExpo'])
         remainder = FastModExo(x,e,mod)
         print("{} ^ {} mod {} is: {}".format(x,e,mod,remainder))
-        return redirect(url_for('index'))
-    return render_template('index') # its a GET request. no form submitted
+        return render_template('index.html', xx=x,ee=e,mm=mod,remainder=remainder)
+    return render_template('index.html') # its a GET request. no form submitted
 
 @app.route('/roots', methods=['GET', 'POST'])
 def roots():
@@ -79,7 +81,7 @@ def roots():
         modulo = int(request.form['nroots'])
         print("The smallest Primitive root is: {}".format(findPrimitive(modulo)))
         return redirect(url_for('index'))
-    return render_template('index')
+    return render_template('index.html')
 
 @app.route('/rootsList', methods=['GET', 'POST'])
 def rootsList():
@@ -87,18 +89,19 @@ def rootsList():
         modulo = int(request.form['listroots'])
         print("The Primitive Roots are: {}".format(primRoots(modulo)))
         return redirect(url_for('index'))
-    return render_template('index')
+    return render_template('index.html')
 
 @app.route('/prime', methods=['GET', 'POST'])
 def prime():
     if request.method == 'POST':
         n = int(request.form['n'])
-        if(isPrime(n)):
+        res = isPrimeMR(n)
+        if(isPrimeMR(n)):
             #Should be a prime number
             print('{} is a prime number'.format(n))
         else:
             print('{} is not a prime number'.format(n))
-        return redirect(url_for('index'))
+        return render_template('index.html',pis=n,res=res)
     return render_template('index') # its a GET request. no form submitted
 
 
@@ -118,10 +121,11 @@ def size():
     from 1-> n-1 that are reletively prime to n. """
     if request.method == 'POST':
         zn = int(request.form['n'])
+        size = Order(zn)
         print("The order of {} is: {}".format(zn,Order(zn)))
-        return redirect(url_for('index'))
+        return render_template('index.html',size=size)
     
-    return render_template('index')# GET Request
+    return render_template('index.html')# GET Request
 
 @app.route('/log', methods=['GET','POST'])
 def log():
@@ -309,11 +313,27 @@ def rsa_gen_random():
     return render_template('rsa.html')# GET Request
 
 
-@app.route('/rsa_enc', methods=['GET','POST'])
-def rsa_enc():
+@app.route('/rsa_enc_view', methods=['GET','POST'])
+def rsa_enc_view():
     print("In RSA Encryption")
     if request.method == 'POST':
-        print("POST")
-        return render_template('rsa.html')
+        print("POST ENC")
+        num = int(request.form['rsa_num_enc'])
+        e = int(request.form['e_enc'])
+        n = int(request.form['n_enc'])
+        enc = rsa_enc(num,e,n)
+        return render_template('rsa.html', e_enc=e,rsa_enc=enc,n_enc=n)
     return render_template('rsa.html')# GET Request
 
+@app.route('/rsa_dec_view', methods=['GET','POST'])
+def rsa_dec_view():
+    print("In RSA Decryption")
+    if request.method == 'POST':
+        print("POST DEC")
+        num = int(request.form['rsa_num_dec'])
+        d = int(request.form['d_dec'])
+        n = int(request.form['n_dec'])
+        print("enc: {}, d = {}, n = {}".format(num,d,n))
+        dec = rsa_dec(num,d,n)
+        return render_template('rsa.html', d_dec=d,rsa_dec=dec,n_dec=n)
+    return render_template('rsa.html')# GET Request
