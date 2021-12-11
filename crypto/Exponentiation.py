@@ -59,39 +59,3 @@ def primeFactor(n):
     if n>2:
         print(n) # this must be a prime larger than 2
 
-def isPrime(n):
-    """Given a number n this function will determin if that number is prime or not
-    We do this by starting at i=2 and increasing until sqrt(n) and each time check if
-    i is a divisor of n. If it is then we know that n is not prime and we can exit early. 
-    We go until sqrt(n) because any larger factor than that must be a multiple of a smaller
-    factor that we already checked on our way up to sqrt(n) """
-    prime_flag = 0 # use this flag to see if it is prime as we check. If we flip this we can stop beacuse we know its not prime    
-
-    if(n>1):
-        for i in range(2,int(math.sqrt(n))+1):
-            if (n%i == 0): # i is a divisor of n -> not prime
-                prime_flag = 1
-                break # we can breakout early
-        if (prime_flag == 0):
-            print("{} is a prime number".format(n))
-        else:
-            print("{} is not a prime number".format(n))
-            print("{} times {} = {}".format(i,(n//i),n))
-    else: # maybe it is a negative number
-        print("{} is not a prime number".format(n))
-    return prime_flag
-
-"""
-print("Let's try it")
-print(FastModExo(2,100,71))
-print("And again")
-print(FastModExo(12039,7915,12091))
-
-print(primeFactor(12248856))
-isPrime(11)
-isPrime(25)
-isPrime(44)
-isPrime(-11)
-isPrime(12397864568)
-"""
-

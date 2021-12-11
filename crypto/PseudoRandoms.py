@@ -89,3 +89,27 @@ def gen_random_prime(size=100000):
         rand = random.randrange(size)
         if isPrimeMR(rand):
             return rand
+
+def isPrime(n):
+    """Given a number n this function will determin if that number is prime or not
+    We do this by starting at i=2 and increasing until sqrt(n) and each time check if
+    i is a divisor of n. If it is then we know that n is not prime and we can exit early. 
+    We go until sqrt(n) because any larger factor than that must be a multiple of a smaller
+    factor that we already checked on our way up to sqrt(n) 
+    This was written for the midterm and had now been replaced witht the MillerRabin test for Pimality. 
+    The MR test is much more efficient for large numbers."""
+    prime_flag = 0 # use this flag to see if it is prime as we check. If we flip this we can stop beacuse we know its not prime    
+
+    if(n>1):
+        for i in range(2,int(math.sqrt(n))+1):
+            if (n%i == 0): # i is a divisor of n -> not prime
+                prime_flag = 1
+                break # we can breakout early
+        if (prime_flag == 0):
+            print("{} is a prime number".format(n))
+        else:
+            print("{} is not a prime number".format(n))
+            print("{} times {} = {}".format(i,(n//i),n))
+    else: # maybe it is a negative number
+        print("{} is not a prime number".format(n))
+    return prime_flag

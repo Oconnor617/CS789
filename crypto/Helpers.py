@@ -1,6 +1,6 @@
 #from math import *
 import math
-from crypto.Exponentiation import isPrime
+#from crypto.Exponentiation import isPrime
 from crypto.Euclidean import GCD
 from crypto.PseudoRandoms import isPrimeMR
 
