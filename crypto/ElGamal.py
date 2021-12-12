@@ -3,6 +3,7 @@ from crypto.Exponentiation import FastModExo
 import random
 from math import pow
 from crypto.PrimRoots import *
+from crypto.PseudoRandoms import *
 
 
 """This  is an implementation of the ElGamal Cipher Algorithm.
@@ -59,6 +60,8 @@ def key_gen(p):
     b: a primitive root of p
     r: a secret random number
     h: h=b^r(modp) used for the public key"""
+    if not isPrimeMR(p):
+        return {'PublicKey': "Please use a Prime", 'PrivateKey': "Please use a Prime"}
     b = findPrimitive(p) #Should be the smallest Primitive Root of P. This will be -1 if root DNE
     # Need to fix the Primitive Root Search Algorithm. It currently doesn't work for non prime
     r = random.randint(1,(p-1))  # random secret between 1 and p-1
@@ -161,4 +164,42 @@ def decrypt_num(enc_num, pka, l, p):
     print("b^lr used: {}".format(s))
     dec = int(enc_num/s) #In reality change this to a loop to handle this letter by letter
     print("Decrypted message is: {}".format(dec))
+    return dec
+
+# The funcitons below will implements Eve's Man in the Middle attack
+def eve_key_gen(pka,pkb,p):
+    """This function will be used to generate fake keys for Eve's Man in the Middle Attack.
+    If Alice and Bob's Public Keys are of the form b^r and B^l (where r & l are their Private Keys)
+    then Eve's fake keys will have the form Fake Alice: b^rx and Fake Bob: b^ly, where x,y are Eve's Private Keys
+    tied to each Public Key. It will take three inputs:
+        pka: Alice's Public Key (form b^r)
+        pka: Bob's Public Key (form b^l)
+        p: The modulus
+    It will then complute and return the fake keys
+    """
+    x = random.randint(1,(p-1))  # random secret for Alice's fake key
+    y = random.randint(1,(p-1))  # random secret for Bob's fake key
+    hea = FastModExo(pka,x,p)  # Fake key for Alice. Should be (b^r)^x=b^rx(modp)
+    heb = FastModExo(pkb,y,p)  # Fake key for Bob. Should be (b^l)^y=b^ly(modp)
+    fake_alice_public = PublicKey(p,pka,hea) # Here b=b^r rather than just a Primitive root
+    fake_alice_private = PrivateKey(p,pka,x)
+    fake_bob_public = PublicKey(p,pkb,heb)
+    fake_bob_private = PrivateKey(p,pkb,y)
+    return {'FakeAlicePublicKey': fake_alice_public, 'FakeAlicePrivateKey': fake_alice_private,
+    'FakeBobPublicKey': fake_bob_public, 'FakeBobPrivateKey': fake_bob_private }
+
+def eve_attack(enc_num,heb,ha,p):
+    """This funciton will decrypt a message that Eve intercepted. This works if Alice is trying to send Bob a message but Alice
+    has been tricked into using Eve's Fake Public Key for Bob to do the encryption. It will take a few inputs:
+        enc_num: The number that Alice encrypted using Eve's fake public key for Bob. Sould be M * (b^ly)^r
+        heb=b^ly: The fake public key that Eve created for Bob and Alice used for the encryption
+        ha = b^r: Alice's Public Key
+        p: the group used as the basis for the generator and the modulus
+    it then simply computes heb * ha = b^lyr followed by enc_num/b^lyr to get M
+    """
+    dec = decrypt_num(enc_num,ha,heb,p)
+    print("Eve = {}".format(dec))
+    attempt = FastModExo(ha,heb,p) # I think this should be b^lyr
+    attempt2 = int(enc_num/attempt)
+    print("My Attempt is {}".format(attempt2))
     return dec

@@ -2,7 +2,7 @@
 crate Encryption and Dercryption Keys. """
 from crypto.Exponentiation import FastModExo
 from crypto.Euclidean import GCD, egcd, modinv
-from crypto.PseudoRandoms import isPrimeMR
+from crypto.PseudoRandoms import *
 import random
 
 class RSAEncKey:
@@ -90,3 +90,20 @@ def rsa_dec(num_enc,d,n):
     dec = FastModExo(num_enc,d,n) # should be (num^e)^d=(num)^ed=num since e & d should be inverses modn
     print(dec)
     return dec
+
+def rsa_eve(enc_msg,e,n):
+    """This function will operate as Eve's Evesdropping attack on RSA encryption. It will take three inputs:
+        enc_msg: An encrypted number
+        e: The public Encryption key used to generate enc_msg
+        n: The product of two Primes p & q used to generate e and d for the sender
+    This function will use Pollard's P-1 method to factor n into p&q. Once we have obtained p&q we can basically simulate the
+    rsa_keys() above using the input e instead of a random one. That means we can easily find d and decrypt the input enc_msg"""
+    p,q = pollard_result(n) #This might take a long time but we should now have p*q=n
+    phi = (p-1) * (q-1) #Phi is the totient of n and we know that e must be GCD(e,phi)=1 and therfor must have an inverse d
+    #So find it using the Multiplicative Inververe via Extended Euclidean
+    d = modinv(e,phi) #hopefully d is the inverse of e under phi
+
+    #Well now we have everything we need to simulate rsa_dec() above. In fact jsut call it!
+    dec = rsa_dec(enc_msg,d,n)
+    print("Encrypted: {}, Decrypted {}".format(enc_msg,dec))
+    return dec 

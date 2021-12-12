@@ -25,14 +25,14 @@
   <body>
 
     <div>
-      <h1>Complete the form below to generate your RSA Encryption and Decyption Key</h1>
-      <h3>Keys are in the form of Encryption E(e,n), Decryption (d,n) where: 
-        p: A lagge Prime Number
-        q: A large Prime Number such that p!=q
-        n: n=p*q
-        phi: Euler's Totient Function phi(n)=(p-1)(q-1) - since p&q are prime
-        e: Encryption Key a number reletively prime to n
-        d: Decryption Key a number that is the inverse of e in Zn</h3>
+      <h1>Complete the form below to generate your RSA Encryption and Decyption Key</h1><br> 
+      <h3>Keys are in the form of Encryption E(e,n), Decryption (d,n) where:<br> 
+        p: A lagge Prime Number<br> 
+        q: A large Prime Number such that p!=q<br> 
+        n: n=p*q<br> 
+        phi: Euler's Totient Function phi(n)=(p-1)(q-1) - since p&q are prime<br> 
+        e: Encryption Key a number reletively prime to n<br> 
+        d: Decryption Key a number that is the inverse of e in Zn</h3><br> 
       <form id="GenN" method="post" action="{{ url_for('rsa_gen') }}">
       <label for="Enter two numbers to check if they are prime and can be used for RSA"></label><br>
       <input type="number" id="p1check" name="p1check" placeholder="Enter first Prime: p"><br>
@@ -51,6 +51,7 @@
     </div>
 
     <div>
+      <h3>RSA Encryption</h3>
         <form id="RSAEnc" method="post" action="{{ url_for('rsa_enc_view') }}">
             <label for="Number to Encrypt"></label><br>
             <input type="number" id="rsa_num_enc" name="rsa_num_enc" placeholder="Enter the Number that you want to Encrypt"><br>
@@ -64,9 +65,10 @@
             </p><br>
             {% endif %}
         </form>
-    </div>
+      </div>
 
     <div>
+      <h3>RSA Decryption</h3>
       <form id="RSADec" method="post" action="{{ url_for('rsa_dec_view') }}">
           <label for="Number to Decrypt"></label><br>
           <input type="number" id="rsa_num_dec" name="rsa_num_dec" placeholder="Enter the Number that you want to Decrypt"><br>
@@ -80,7 +82,25 @@
           </p><br>
           {% endif %}
       </form>
-  </div>
+    </div>
+
+    <div>
+      <h3>Complete the form below to crack RSA Encryption using Pollars Factorization</h3>
+      <form id="RSAEnc" method="post" action="{{ url_for('rsa_eve_view') }}">
+          <label for="Number to Encrypt"></label><br>
+          <input type="number" id="eve_msg" name="eve_msg" placeholder="Enter the Encrypted Number"><br>
+          <input type="number" id="eve_e" name="eve_e" placeholder="Enter the senders encryption key: e"><br>
+          <input type="number" id="eve_n" name="eve_n" placeholder="Enter n:"><br>
+          <input type="submit" value="Submit to break the RSA Encryption">
+          {% if eve_msg %}
+          <p>
+            The Encrypted Message was:  {{ eve_msg }} with Public Key: ({{e_eve, n_eve}})<br>
+            Your Decrypted message is:  {{ eve_dec }}
+          </p><br>
+          {% endif %}
+      </form>
+    </div>
+    
 
   </body>
   {% endblock %}

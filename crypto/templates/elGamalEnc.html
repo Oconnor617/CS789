@@ -35,7 +35,7 @@
         h: h=b^r(modp) -> r is a secret random number that is chosen during the key generation phase</h3>
       <form id="KeyGen" method="post" action="{{ url_for('elKeyGen') }}">
       <label for="Enter the Group"></label><br>
-      <input type="number" id="keygroup" name="keygroup" placeholder="Enter the Large Number">
+      <input type="number" id="keygroup" name="keygroup" placeholder="Enter the Large Number"><br>
       <input type="submit" value="Generate Keys">
     </form>
     {% if p %}
@@ -45,6 +45,12 @@
     </p>
     <p>The Public Key for Bob is: ({{ bb }}, {{ hb }}, {{ pb }})<br>
       The Private Key for Bob is is: {{ l }}
+    </p>
+    {% endif %}
+    {% if notP %}
+    <p>
+      The Public Key for Alice is: ({{ b }}, {{ h }}, {{ p }})<br>
+      The Private Key for Alice is is: {{ r }}
     </p>
     {% endif %}
     </div>
@@ -124,20 +130,63 @@
       </form>
   </div>
 
-    <div>
-      <h1>Complete this form below if you want to Decrypt a number</h1>
-      <form id="BoB_num" method="post" action="{{ url_for('elDecNum') }}">
-        <label for="Enter the Encrypted Number for Decription"></label><br>
-        <input type="num" id="num_enc" name="num_enc" placeholder="Enter the Encrypted Number">
-        <input type="number" id="pub_alice_num" name="pub_alice_num" placeholder="Enter the Public Key of the Sender: h=b^r(modp)">
-        <input type="number" id="pri_B_num" name="pri_B_num" placeholder="Enter the Private Key of the Reciever: l">
-        <input type="number" id="g_num" name="g_num" placeholder="Enter the Group: p"><br>
-        <input type="submit" value="Submit Number for Decryption">
-      </form>
-      {% if num_enc %}
-      <p>The Encrypted Message is: {{ num_enc }}</p><br>
-      <p>The Decrypted Message is: {{ num_dec }}</p><br>
-      {% endif %}
+      <div>
+        <h1>Complete this form below if you want to Decrypt a number</h1>
+        <form id="BoB_num" method="post" action="{{ url_for('elDecNum') }}">
+          <label for="Enter the Encrypted Number for Decription"></label><br>
+          <input type="num" id="num_enc" name="num_enc" placeholder="Enter the Encrypted Number">
+          <input type="number" id="pub_alice_num" name="pub_alice_num" placeholder="Enter the Public Key of the Sender: h=b^r(modp)">
+          <input type="number" id="pri_B_num" name="pri_B_num" placeholder="Enter the Private Key of the Reciever: l">
+          <input type="number" id="g_num" name="g_num" placeholder="Enter the Group: p"><br>
+          <input type="submit" value="Submit Number for Decryption">
+        </form>
+        {% if num_enc %}
+        <p>The Encrypted Message is: {{ num_enc }}</p><br>
+        <p>The Decrypted Message is: {{ num_dec }}</p><br>
+        {% endif %}
+      </div>
+
+      <h1>The two forms below can be used to simulate Eve's Man in the Middle Attack</h1>
+      <div>
+        <h1>Complete this form to generate fake keys of Alice and Bob.
+          <p>If Alice and Bob's Public Keys are of the form b^r and B^l (where r & l are their Private Keys)<br>
+            then Eve's fake keys will have the form Fake Alice: b^rx and Fake Bob: b^ly, where x,y are Eve's Private Keys
+            tied to each Public Key. (Note: Use the Forms above to generate the Keys)
+          </p>
+        </h1>
+        <form id="EveKey" method="post" action="{{ url_for('eve_key_gen_view') }}">
+          <label for="Enter the Public Keys of those you want to attack"></label><br>
+          <input type="number" id="eve_alice_pub" name="eve_alice_pub" placeholder="Enter Alice's Public Key: h=b^r(modp)"><br>
+          <input type="number" id="eve_bob_pub" name="eve_bob_pub" placeholder="Enter Bob's Public Key: h=b^l(modp)"><br>
+          <input type="number" id="eve_p" name="eve_p" placeholder="Enter the Group: p"><br>
+          <input type="submit" value="Submit to generate Fake Keys">
+        </form>
+        {% if fake_alice %}
+        <p>Eve's Fake Key for Alice (b^rx): {{ fake_alice }} with x= {{x}}</p><br>
+        <p>Eve's Fake Key for Bob (b^ly): {{ fake_bob }} with y= {{y}}</p><br>
+        {% endif %}
+      </div>
+
+      <div>
+        <h1>Complete this form to perform Eve's Man in The Middle Attack
+          <p>This will require the an Encypted message made by Alice using Eve's Fake Public Key for Bob<br>
+            (Use the form above to generate the message)<br>
+
+          </p>
+        </h1>
+        <form id="EveAttack" method="post" action="{{ url_for('eve_attack_view') }}">
+          <label for="Enter Encrypted Number"></label><br>
+          <input type="number" id="eve_num" name="eve_num" placeholder="Enter the Encrypted Message">
+          <input type="number" id="eve_bob_fake" name="eve_bob_fake" placeholder="Enter Bob's Fake Public Key: h=b^ly(modp)">
+          <input type="number" id="eve_attack_alice" name="eve_attack_alice" placeholder="Enter Alice's Public Key: h=b^r(modp)">
+          <input type="number" id="eve_p_attack" name="eve_p_attack" placeholder="Enter the Group: p"><br>
+          <input type="submit" value="Submit to perform Eve's Attack">
+        </form>
+        {% if eve_dec %}
+        <p>The Encrypted Message meant for Bob: {{eve_enc}}</p><br>
+        <p>Eve's Decryption: {{eve_dec}}</p><br>
+        {% endif %}
+      </div>
   </body>
   {% endblock %}
 </html>

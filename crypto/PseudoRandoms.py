@@ -1,5 +1,7 @@
 import random
 import math
+from crypto.Exponentiation import FastModExo
+from crypto.Euclidean import GCD
 """THis module wll contain code for generating Pseudo Random Numbers and implement a Miller-Rabin Primality Test algorithm
 to test the primality of those numbers. The random prime numbers generated can then be used for the El Gamal Encryption and
 The RSA Encryption. This will also provide an update to my isPrime() function which will now use the Miller-Rabin algorthm to test
@@ -113,3 +115,44 @@ def isPrime(n):
     else: # maybe it is a negative number
         print("{} is not a prime number".format(n))
     return prime_flag
+
+def pollard_p1(n):
+    """This function will implement Pollard's p-1/rho Algorithm for factoring a number n into it's prime components.
+    This will be used to break RSA and act a Eve while evesdropping. It might be very slow at times but should be able to factor
+    n into p & q allowing Eve to decrypt the message. It works by finding the first Prime Factor (p) and then continues on until
+    it finds the second factor(q). The way it works is:
+    Pre) Check if it is Prime already and just skip this whole thing if so
+    1) given n. initialize a=2,i=2
+    2) while (d not prime):
+        a=(a^i)modn (use FastExoMod)
+        d=GCD(a-1,n)
+        if d!=1:
+            return d
+        else:
+            i=i+1 and try again
+    
+    #Once this finises d is our first factor
+    3) set s=(n/d) and repeat step 1 until s is prime. I.e you are kind of calling pollard_p1(n) twice
+    It might be slow for large values of RSA key n but it will factor it!
+    """
+    a = 2
+    i = 2
+    while(True): # an infinite loop until a prime factor is found
+        a = FastModExo(a,i,n) #(a^i)modn
+        d = GCD(a-1,n) 
+        if (d > 1): # check if factor obtained
+   
+            #return the factor
+            return d
+            break
+        i += 1 #try again with i+1
+def pollard_result(n):
+    """This is just a helper funciton to call pollard_p1 twice. Once to obtain d and the other time to obtain r=(n/d) where r is prime"""
+    d = pollard_p1(n) # Should be the first Prime Factor
+    r = int(n/d) #Step 3) above.
+    if(isPrimeMR(r)): # Is this the second factor1?
+        #use our new Miller Rabin test
+        return d,r # d and r must be the Prime Factors
+    else:
+        r = pollard_p1(r) # call it again on r this time
+        return d,r

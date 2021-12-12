@@ -1,6 +1,6 @@
 from werkzeug.utils import redirect
 from crypto import app
-from crypto.ElGamal import key_gen, encrypt, decrypt, key_gen_root, encrypt_num, decrypt_num
+from crypto.ElGamal import key_gen, encrypt, decrypt, key_gen_root, encrypt_num, decrypt_num, eve_key_gen, eve_attack
 from crypto.Euclidean import *
 from crypto.Exponentiation import *
 from crypto.Helpers import *
@@ -9,7 +9,7 @@ from flask import render_template, request, flash, url_for
 from crypto.PrimRoots import *
 import math
 
-from crypto.RSA import rsa_keys, rsa_enc, rsa_dec
+from crypto.RSA import rsa_keys, rsa_enc, rsa_dec, rsa_eve
 
 @app.route('/')
 @app.route('/index')
@@ -198,7 +198,7 @@ def elDec():
     return render_template('elGamalEnc.html') #GET Request
 
 ###################################################################################
-# Routes for performing ElGamal Encryption/Decryption on Numbers
+# Routes for performing ElGamal Encryption/Decryption on Numbers - Including Eve's Attack
 ###################################################################################
 @app.route('/elEncNum', methods=['GET','POST'])
 def elEncNum():
@@ -207,6 +207,7 @@ def elEncNum():
         pkb = int(request.form['pub_bob_num'])
         b = int(request.form['generator_num'])
         pri_A = int(request.form['pri_A_num'])
+
         group = int(request.form['group_num'])
         print("This is in routes. The message is {} ".format(x))
         print("Bob Public: {}".format(pkb))
@@ -229,8 +230,21 @@ def elDecNum():
         #dec = decrypt(msg_enc,pka,pri_B,p)
         return render_template('elGamalEnc.html', num_enc=num_enc,num_dec=dec)
     return render_template('elGamalEnc.html') #GET Request
+
+@app.route('/eve_attack_view', methods=['GET','POST'])
+def eve_attack_view():
+    if request.method == 'POST':
+        num_enc = int(request.form['eve_num']) #Will be a number
+        heb = int(request.form['eve_bob_fake'])
+        ha = int(request.form['eve_attack_alice'])
+        p = int(request.form['eve_p_attack'])
+        eve_dec = eve_attack(num_enc,heb,ha,p)
+        return render_template('elGamalEnc.html',eve_enc=num_enc,eve_dec=eve_dec)
+    return render_template('elGamalEnc.html') #GET Request
+
+
 ###########################################################################
-# Routes for ElGamal Key Generation
+# Routes for ElGamal Key Generation - including Eve's Fake Keys
 ###########################################################################
 
 @app.route('/elKeyGen', methods=['GET','POST'])
@@ -238,6 +252,8 @@ def elKeyGen():
     if request.method == 'POST':
         p = int(request.form['keygroup'])
         print('The Modulus is: {}'.format(p))
+        if not isPrimeMR(p):
+            return render_template('elGamalEnc.html', notP=1)
         keys_A = key_gen(p) #should return a dictionary
         pri_A = keys_A['PrivateKey']
         pub_A = keys_A['PublicKey']
@@ -251,11 +267,6 @@ def elKeyGen():
         bob_pri = keys_B['PrivateKey']
         bob_pub = keys_B['PublicKey']
         bobB, bobH, bobP, bobL = bob_pub.get_b(), bob_pub.get_h(), bob_pub.get_p(), bob_pri.get_r() # The Key info for Bob
-        #print(keys)
-        #print(keys.values())
-        #print(keys['PublicKey'].get_p)
-        #Call the ElGamal Script to generate the Keys and encrypt the message
-        #return redirect(url_for('index'))
         return render_template('elGamalEnc.html', p=pubP, b=pubB, h=pubH, r=priA, bb=bobB, pb=bobP, hb=bobH, l=bobL)
     return render_template('elGamalEnc.html') #GET Request
 
@@ -282,6 +293,25 @@ def elKeyGenRoot():
         bobB, bobH, bobP, bobL = bob_pub.get_b(), bob_pub.get_h(), bob_pub.get_p(), bob_pri.get_r() # The Key info for Bob
         return render_template('elGamalEnc.html', pR=pubP, bR=pubB, hR=pubH, rR=priA)
     return render_template('elGamalEnc.html') #GET Request
+
+@app.route('/eve_key_gen', methods=['GET','POST'])
+def eve_key_gen_view():
+    if request.method == 'POST':
+        pka = int(request.form['eve_alice_pub']) #b^r
+        pkb = int(request.form['eve_alice_pub']) #b^l
+        p = int(request.form['eve_p'])
+        print('The Modulus is: {}'.format(p))
+        if not isPrimeMR(p):
+            return render_template('elGamalEnc.html', notP=1)
+        #Now use Eve's Key Gen function
+        fake_keys = eve_key_gen(pka,pkb,p)
+        fake_alice = fake_keys['FakeAlicePublicKey'].get_h()
+        fake_bob = fake_keys['FakeBobPublicKey'].get_h()
+        x = fake_keys['FakeAlicePrivateKey'].get_r() # The secret x used to create Alice's fake key
+        y = fake_keys['FakeBobPrivateKey'].get_r() # The secret y used to create Bob's fake key
+        return render_template('elGamalEnc.html',fake_alice=fake_alice,fake_bob=fake_bob,x=x,y=y)
+    return render_template('elGamalEnc.html') #GET Request
+
 ###########################################################################
 # Routes for RSA Key Generation - Either given p&q or randomlly generate prime p&q
 ###########################################################################
@@ -342,4 +372,27 @@ def rsa_dec_view():
         print("enc: {}, d = {}, n = {}".format(num,d,n))
         dec = rsa_dec(num,d,n)
         return render_template('rsa.html', d_dec=d,rsa_dec=dec,n_dec=n)
+    return render_template('rsa.html')# GET Request
+
+@app.route('/pollard', methods=['GET','POST'])
+def pollard():
+    print("Pollards Factorization")
+    if request.method == 'POST':
+        n = int(request.form['pol'])
+        #get p and q from Pollards function
+        p,q= pollard_result(n)
+        return render_template('index.html', npol=n,ppol=p,qpol=q)
+    return render_template('index.html')# GET Request
+
+@app.route('/rsa_eve_view', methods=['GET','POST'])
+def rsa_eve_view():
+    print("Eve's Attack")
+    if request.method == 'POST':
+        n = int(request.form['eve_n'])
+        enc_msg = int(request.form['eve_msg'])
+        e = int(request.form['eve_e'])
+        #now call Pollards Factorization
+        dec = rsa_eve(enc_msg,e,n) #pass all of the relevant information to the RSA Eve fucniton and let it take care of it
+        print("The Decrypted Message is {}".format(dec))
+        return render_template('rsa.html', n_eve=n,eve_msg=enc_msg,e_eve=e,eve_dec=dec)
     return render_template('rsa.html')# GET Request

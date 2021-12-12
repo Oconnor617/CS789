@@ -165,6 +165,18 @@
         </form>
     </div>
 
+    <div>
+        <h3>Complete this form to find the prime factorization of N using Pollards method</h3>
+     <form id="Moddy" method="post" action="{{ url_for('pollard') }}">
+         <label for="polnum"></label><br>
+         <input type="number" id="pol" name="pol" placeholder="Enter a Number"><br>
+         <input type="submit" value="Submit for Pollards Factorization">
+         {% if ppol %}
+         <p>The Prime factors of {{npol}} are {{ppol}} and {{qpol}}</p><br>
+         {% endif %}
+     </form>
+ </div>
+
 
 {% endblock %}
 </html>
