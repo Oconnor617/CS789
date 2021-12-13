@@ -4,6 +4,7 @@
     run the tests. It will make use of Python's unittest framework.
 """
 from crypto import app
+from crypto.ElGamal import decrypt_num, encrypt_num, key_gen
 from crypto.Euclidean import *
 from crypto.Exponentiation import *
 from crypto.Helpers import *
@@ -11,6 +12,8 @@ from crypto.PrimRoots import findPrimitive
 from crypto.PseudoRandoms import *
 from crypto.RSA import *
 import unittest
+
+from crypto.routes import elEncNum, elKeyGen
 
 class FunctionTests(unittest.TestCase):
     """A Class for my function unittests"""
@@ -69,6 +72,13 @@ class FunctionTests(unittest.TestCase):
         self.assertTrue(((res1 == p) or (res1 == q)))
         self.assertTrue(((res2 == p) or (res2 == q)))
 
+    def test_random_prime(self):
+        """Test cases for my PseudoRandom Prime Generator. It will use Miller-Rabin whcih was just tested"""
+        rand1,rand2,rand3 = gen_random_prime(),gen_random_prime(),gen_random_prime(),
+        self.assertTrue(isPrimeMR(rand1))
+        self.assertTrue(isPrimeMR(rand2))
+        self.assertTrue(isPrimeMR(rand3))
+
     def test_rsa_simulation(self):
         """Test function that will essentially simulate a Alice/Bob/Eve RSA exchange"""
         alice_e = 178512487
@@ -82,6 +92,20 @@ class FunctionTests(unittest.TestCase):
         #time for Eve's attack
         eve = rsa_eve(msg_enc,alice_e,n)
         self.assertEqual(bob_msg,eve) #Assert that Eve can break the message by Factoring Primes
+
+    def test_elgamal_simulation(self):
+        """Test function that will essentially simulate a Alice/Bob/Eve ElGamal exchange"""
+        group = 101
+        alice_keys = key_gen(group)
+        bob_keys = key_gen(group)
+        generator = alice_keys["PublicKey"].get_b()
+        alice_pri,alice_pub = alice_keys["PrivateKey"].get_r(),alice_keys["PublicKey"].get_h()
+        bob_pri,bob_pub = bob_keys["PrivateKey"].get_r(),bob_keys["PublicKey"].get_h()
+        msg = 66
+        enc_msg = encrypt_num(msg,bob_pub,alice_pri,group) #Encrypt a Message from Alice to Bob
+        dec_msg = decrypt_num(enc_msg,alice_pub,bob_pri,group) #decrypt the message
+        self.assertEqual(dec_msg,msg) #ensure the Encryption and Decryption worked
+
 
 if __name__ == '__main__':
     unittest.main(verbosity=2)
