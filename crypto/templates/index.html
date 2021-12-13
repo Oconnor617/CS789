@@ -146,24 +146,25 @@
 
    <div>
        <h3>Complete this form to find the remainder (i.e computes a%b)</h3>
-    <form id="Moddy" method="post" action="{{ url_for('modEasy') }}">
-        <label for="theNum"></label><br>
-        <input type="number" id="nums" name="nums" placeholder="Enter a Number"><br>
-        <label for="Moddy"></label><br>
-        <input type="number" id="moddy" name="moddy" placeholder="Enter the Modulus"><br>
-        <input type="submit" value="Submit Easy Mod">
-    </form>
-</div>
+        <form id="Moddy" method="post" action="{{ url_for('modEasy') }}">
+            <label for="theNum"></label><br>
+            <input type="number" id="nums" name="nums" placeholder="Enter a Number"><br>
+            <label for="Moddy"></label><br>
+            <input type="number" id="moddy" name="moddy" placeholder="Enter the Modulus"><br>
+            <input type="submit" value="Submit Easy Mod">
+        </form>
+    </div><br>
 
 
     <div>
+        <h3>Click the button below to generate a random large Prime number</h3>
         <form id="randPrime" method="post" action="{{ url_for('randP') }}">
             <input type="submit" value="Submit For a Random Prime">
             {% if rand %}
             <p>The Random Prime is: {{ rand }}</p><br>
             {% endif %}
         </form>
-    </div>
+    </div><br>
 
     <div>
         <h3>Complete this form to find the prime factorization of N using Pollards method</h3>
