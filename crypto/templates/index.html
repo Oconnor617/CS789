@@ -20,6 +20,7 @@
         </style>
     </head>
      <div>
+         <h3>Complete this form to find the GCD of two numbers</h3>
           <form id="GCD" method="post" action="{{ url_for('gcd') }}">
               <label for="GCD_M"></label><br>
               <input type="number" id="GCD_M" name="GCD_M" placeholder="Enter M"><br>
@@ -27,9 +28,15 @@
               <input type="number" id="GCD_N" name="GCD_N" placeholder="Enter N"><br>
               <input type="submit" value="Submit GCD">
           </form>
+          {% if gcd %}
+          <p>
+              The GCD of {{ first }} and {{ second }} is: {{ gcd }}<br>
+          </p><br>
+          {% endif %}
      </div>
 
      <div>
+         <h3>Complete this form to find the Multiplicative Inverse of a number</h3>
         <form id="ModInverse" method="post" action="{{ url_for('modInverse') }}">
             <label for="Number"></label><br>
             <input type="number" id="num" name="num" placeholder="Enter a Number"><br>
@@ -84,7 +91,7 @@
             <input type="number" id="prime" name="nFactor" placeholder="Enter a Number for Prime Factorization"><br>
             <input type="submit" value="Check Prime Factor">
         </form>
-    </div>
+    </div><br>
 
     <div>
         <h3>Enter a number to see the size of it's Multiplicative Group</h3>
@@ -98,33 +105,24 @@
             </p><br>
             {% endif %}
         </form>
-    </div>
-
-    <div>
-        <form id="Log" method="post" action="{{ url_for('log') }}">
-            <label for="x"></label><br>
-            <input type="number" id="x" name="x" placeholder="Enter a Number"><br>
-            <label for="Base"></label><br>
-            <input type="number" id="base" name="base" placeholder="Enter the Base"><br>
-            <input type="submit" value="Submit Log">
-        </form>
-   </div>
+    </div><br>
 
    <div>
        <h3>Enter a Number to calculate its smallest Primitive Root (if it exists)</h3>
     <form id="myT" method="post" action="{{ url_for('roots') }}">
         <label for="ross"></label><br>
         <input type="number" id="troots" name="nroots" placeholder="Enter a Number: Output will be the smallest Primitive Root"><br>
-        <input type="submit" value="Check roots">
+        <input type="submit" value="Check for the smallest primitive root">
         {% if small %}
         <p>
           The smalles Primitive Root is :{{ small }}<br>
         </p><br>
         {% endif %}
     </form>
-    </div>
+    </div><br>
 
     <div>
+        <h3>Enter a number to find complete list of Primitive Roots if they exist (note this will be very slow for large non-prime numbers)</h3>
         <form id="myPrime" method="post" action="{{ url_for('rootsList') }}">
             <label for="RootsList"></label><br>
             <input type="number" id="listroots" name="listroots" placeholder="Enter a Number: Output will be a list of the Primitive Roots"><br>

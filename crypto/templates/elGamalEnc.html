@@ -60,7 +60,7 @@
   
       <form id="KeyGenRoot" method="post" action="{{ url_for('elKeyGenRoot') }}">
       <label for="Enter the Group"></label><br>
-      <input type="number" id="keygroupRoot" name="keygroupRoot" placeholder="Enter the Large Number">
+      <input type="number" id="keygroupRoot" name="keygroupRoot" placeholder="Enter the Large Number"><br>
       <label for="Enter the Primitive Root to use"></label><br>
       <input type="number" id="Root" name="Root" placeholder="Enter the Primitive Root"><br>
       <input type="submit" value="Generate Keys Root">
@@ -77,10 +77,10 @@
         <h1>Complete this form below if you want to Encrypt a String</h1>
         <form id="Alice" method="post" action="{{ url_for('elEnc') }}">
             <label for="Message to Encrypt"></label><br>
-            <input type="text" id="message" name="message" placeholder="Enter the Message that you want to Encrypt">
-            <input type="number" id="pub_bob" name="pub_bob" placeholder="Enter the Public Key of the Reciever: h=b^l(modp)">
-            <input type="number" id="generator" name="generator" placeholder="Enter the Generator: b">
-            <input type="number" id="pri_A" name="pri_A" placeholder="Enter the Private Key of the Sender: r">
+            <input type="text" id="message" name="message" placeholder="Enter the Message that you want to Encrypt"><br>
+            <input type="number" id="pub_bob" name="pub_bob" placeholder="Enter the Public Key of the Reciever: h=b^l(modp)"><br>
+            <input type="number" id="generator" name="generator" placeholder="Enter the Generator: b"><br>
+            <input type="number" id="pri_A" name="pri_A" placeholder="Enter the Private Key of the Sender: r"><br>
             <input type="number" id="group" name="group" placeholder="Enter the Group: p"><br>
             <input type="submit" value="Submit Message for Encryption">
             {% if msg %}
@@ -97,9 +97,9 @@
       <h1>Complete this form below if you want to Decrypt a list where each entry represents a letter in a string</h1>
       <form id="BoB" method="post" action="{{ url_for('elDec') }}">
         <label for="Enter the Encrypted Message for Decription"></label><br>
-        <input type="text" id="msg_enc" name="msg_enc" placeholder="Enter the Encrypted Message">
-        <input type="number" id="pub_alice" name="pub_alice" placeholder="Enter the Public Key of the Sender: h=b^r(modp)">
-        <input type="number" id="pri_B" name="pri_B" placeholder="Enter the Private Key of the Reciever: l">
+        <input type="text" id="msg_enc" name="msg_enc" placeholder="Enter the Encrypted Message"><br>
+        <input type="number" id="pub_alice" name="pub_alice" placeholder="Enter the Public Key of the Sender: h=b^r(modp)"><br>
+        <input type="number" id="pri_B" name="pri_B" placeholder="Enter the Private Key of the Reciever: l"><br>
         <input type="number" id="g" name="g" placeholder="Enter the Group: p"><br>
         <input type="submit" value="Submit Message for Decryption">
       </form>
@@ -114,10 +114,10 @@
       <h1>Complete this form below if you want to Encrypt a number</h1>
       <form id="Alice_num" method="post" action="{{ url_for('elEncNum') }}">
           <label for="Number to Encrypt"></label><br>
-          <input type="number" id="NumMessage" name="NumMessage" placeholder="Enter the Number that you want to Encrypt">
-          <input type="number" id="pub_bob_num" name="pub_bob_num" placeholder="Enter the Public Key of the Reciever: h=b^l(modp)">
-          <input type="number" id="generator_num" name="generator_num" placeholder="Enter the Generator: b">
-          <input type="number" id="pri_A_num" name="pri_A_num" placeholder="Enter the Private Key of the Sender: r">
+          <input type="number" id="NumMessage" name="NumMessage" placeholder="Enter the Number that you want to Encrypt"><br>
+          <input type="number" id="pub_bob_num" name="pub_bob_num" placeholder="Enter the Public Key of the Reciever: h=b^l(modp)"><br>
+          <!--<input type="number" id="generator_num" name="generator_num" placeholder="Enter the Generator: b">-->
+          <input type="number" id="pri_A_num" name="pri_A_num" placeholder="Enter the Private Key of the Sender: r"><br>
           <input type="number" id="group_num" name="group_num" placeholder="Enter the Group: p"><br>
           <input type="submit" value="Submit Number for Encryption">
           {% if num %}
@@ -134,9 +134,9 @@
         <h1>Complete this form below if you want to Decrypt a number</h1>
         <form id="BoB_num" method="post" action="{{ url_for('elDecNum') }}">
           <label for="Enter the Encrypted Number for Decription"></label><br>
-          <input type="num" id="num_enc" name="num_enc" placeholder="Enter the Encrypted Number">
-          <input type="number" id="pub_alice_num" name="pub_alice_num" placeholder="Enter the Public Key of the Sender: h=b^r(modp)">
-          <input type="number" id="pri_B_num" name="pri_B_num" placeholder="Enter the Private Key of the Reciever: l">
+          <input type="num" id="num_enc" name="num_enc" placeholder="Enter the Encrypted Number"><br>
+          <input type="number" id="pub_alice_num" name="pub_alice_num" placeholder="Enter the Public Key of the Sender: h=b^r(modp)"><br>
+          <input type="number" id="pri_B_num" name="pri_B_num" placeholder="Enter the Private Key of the Reciever: l"><br>
           <input type="number" id="g_num" name="g_num" placeholder="Enter the Group: p"><br>
           <input type="submit" value="Submit Number for Decryption">
         </form>
@@ -150,7 +150,7 @@
       <div>
         <h1>Complete this form to generate fake keys of Alice and Bob.
           <p>If Alice and Bob's Public Keys are of the form b^r and B^l (where r & l are their Private Keys)<br>
-            then Eve's fake keys will have the form Fake Alice: b^rx and Fake Bob: b^ly, where x,y are Eve's Private Keys
+            then Eve's fake keys will have the form Fake Alice: b^rx and Fake Bob: b^ly, <br>where x,y are Eve's Private Keys
             tied to each Public Key. (Note: Use the Forms above to generate the Keys)
           </p>
         </h1>

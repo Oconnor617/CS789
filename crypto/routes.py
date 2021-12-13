@@ -12,6 +12,9 @@ import math
 from crypto.RSA import rsa_keys, rsa_enc, rsa_dec, rsa_eve
 
 @app.route('/')
+def home():
+    return render_template('home.html')
+    
 @app.route('/index')
 def index():
     #return "Hello, World! - Welcome to my Crypto app for CS789. Let's Go!"
@@ -22,15 +25,15 @@ def gcd():
     if request.method == 'POST':  # Form Submitted
         GCDM = int(request.form['GCD_M'])
         GCDN = int(request.form['GCD_N'])
-        print(GCDM)
-        print(GCDN)
-        print(type(GCDM))
-        print(type(GCDN)) 
+        #print(GCDM)
+        #print(GCDN)
+        #print(type(GCDM))
+        #print(type(GCDN)) 
         gcd = GCD(GCDM,GCDN)
         print("The GCD of {} and {} is: {}".format(GCDN,GCDM,gcd))
-        return redirect(url_for('index'))
+        return render_template('index.html', first=GCDM,second=GCDN,gcd=gcd)
     else: 
-        return render_template('index') # its a GET request. no form submitted
+        return render_template('index.html') # its a GET request. no form submitted
 
 
 @app.route('/modInverse', methods=['GET', 'POST'])
@@ -50,7 +53,7 @@ def modInverse():
             print("The multiplicative inverse of {} under {} is: {}".format(nummy,moddy,anwser))
             return render_template('index.html', nummy=nummy,moddy=moddy,anwser=anwser)
     else: 
-        return render_template('index') # its a GET request. no form submitted
+        return render_template('index.html') # its a GET request. no form submitted
 
 @app.route('/modEasy', methods=['GET', 'POST'])
 def modEasy():
@@ -62,7 +65,7 @@ def modEasy():
         print("The remainder of {} mod {} is: {}".format(num,mod,remain))
 
         return redirect(url_for('index'))
-    return render_template('index') #GET Request
+    return render_template('index.html') #GET Request
 
 @app.route('/fastExpo', methods=['GET', 'POST'])  
 def fastExpo():
@@ -79,8 +82,9 @@ def fastExpo():
 def roots():
     if request.method == 'POST':
         modulo = int(request.form['nroots'])
-        print("The smallest Primitive root is: {}".format(findPrimitive(modulo)))
-        return redirect(url_for('index'))
+        small = findPrimitive(modulo)
+        print("The smallest Primitive root is: {}".format(small))
+        return render_template('index.html',small=small)
     return render_template('index.html')
 
 @app.route('/rootsList', methods=['GET', 'POST'])
@@ -102,7 +106,7 @@ def prime():
         else:
             print('{} is not a prime number'.format(n))
         return render_template('index.html',pis=n,res=res)
-    return render_template('index') # its a GET request. no form submitted
+    return render_template('index.html') # its a GET request. no form submitted
 
 
 @app.route('/primeFactorRoute', methods=['GET', 'POST'])
@@ -111,7 +115,7 @@ def primeFactorRoute():
         n = int(request.form['nFactor'])
         primeFactor(n)
         return redirect(url_for('index'))
-    return render_template('index') # its a GET request. no form submitted
+    return render_template('index.html') # its a GET request. no form submitted
 
 
 @app.route('/size', methods=['GET', 'POST'])
@@ -127,17 +131,6 @@ def size():
     
     return render_template('index.html')# GET Request
 
-@app.route('/log', methods=['GET','POST'])
-def log():
-    if request.method == 'POST':
-        x = int(request.form['x'])
-        base = int(request.form['base'])
-        result = math.log(x,base)
-        print(result)
-        print("The log of {} base {} is: {}".format(x,base,result))
-        return redirect(url_for('index'))
-    
-    return render_template('index')# GET Request
 
 @app.route('/baby', methods=['GET', 'POST'])
 def baby():
@@ -151,7 +144,7 @@ def baby():
         #print(x,basebaby,babyMod)
         #print(bsgs(x,basebaby,babyMod))
         return redirect(url_for('index'))
-    return render_template('index')# GET Request
+    return render_template('index.html')# GET Request
 
 @app.route('/randP', methods=['GET', 'POST'])
 def randP():
@@ -205,13 +198,13 @@ def elEncNum():
     if request.method == 'POST':
         x = int(request.form['NumMessage'])
         pkb = int(request.form['pub_bob_num'])
-        b = int(request.form['generator_num'])
+        #b = int(request.form['generator_num'])
         pri_A = int(request.form['pri_A_num'])
 
         group = int(request.form['group_num'])
         print("This is in routes. The message is {} ".format(x))
         print("Bob Public: {}".format(pkb))
-        print("Generator: {}".format(b))
+        #print("Generator: {}".format(b))
         print("Alice Private Key: {}".format(pri_A))
         print("Group used: {}".format(group))
         enc = encrypt_num(x,pkb,pri_A,group) # Should return an encrypted message
@@ -346,7 +339,7 @@ def rsa_gen_random():
     return render_template('rsa.html')# GET Request
 
 ###########################################################################
-# Routes for RSA Encryption/Decryption of Numbers
+# Routes for RSA Encryption/Decryption of Numbers - Including Eve's attack with pollards p-1
 ###########################################################################
 
 @app.route('/rsa_enc_view', methods=['GET','POST'])
