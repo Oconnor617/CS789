@@ -135,15 +135,17 @@ def size():
 @app.route('/baby', methods=['GET', 'POST'])
 def baby():
     if request.method == 'POST':
-        x = int(request.form['babyx'])
-        basebaby = int(request.form['babybase'])
-        babyMod = int(request.form['babyMod'])
+        g = int(request.form['babyg'])
+        h = int(request.form['babyh'])
+        mod = int(request.form['babyMod'])
         #babyStep(g,h,p)
-        print(babyStep(x,basebaby,babyMod)) 
+        #print(babyStep(x,basebaby,babyMod)) 
         #8942
         #print(x,basebaby,babyMod)
         #print(bsgs(x,basebaby,babyMod))
-        return redirect(url_for('index'))
+        x = bsgs(g,h,mod)
+        print("The solution to {} = {}^x (mod{}) is x={}".format(h,g,mod,x))
+        return render_template('index.html',hbaby=h,gbaby=g,modbaby=mod,xbaby=x)
     return render_template('index.html')# GET Request
 
 @app.route('/randP', methods=['GET', 'POST'])

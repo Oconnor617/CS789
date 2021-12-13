@@ -131,15 +131,22 @@
         </div>
 
     <div>
+        <h3>Form for computing the Decrete Log via the Baby-Step Giant-Step Algorithm<br>
+        This solves for x in the form h=g^x(modp) for a prime modulus</h3>
         <form id="BabyStep" method="post" action="{{ url_for('baby') }}">
-            <label for="x"></label><br>
-            <input type="number" id="xbaby" name="babyx" placeholder="Enter a Number that is a Generator or base"><br>
-            <label for="Base"></label><br>
-            <input type="number" id="baseBaby" name="babybase" placeholder="Enter the solution"><br>
+            <label for="g"></label><br>
+            <input type="number" id="gbaby" name="babyg" placeholder="Enter a Number that is the base"><br>
+            <label for="H"></label><br>
+            <input type="number" id="hBaby" name="babyh" placeholder="Enter the solution"><br>
             <label for="Mod"></label><br>
             <input type="number" id="babyMod" name="babyMod" placeholder="Enter the Modulus"><br>
             <input type="submit" value="Submit Baby">
         </form>
+        {% if hbaby %}
+        <p>
+            The solution to {{hbaby}} = {{gbaby}}^x (mod{{modbaby}}) is x={{xbaby}}<br>
+        </p><br>
+        {% endif %}
    </div>
 
    <div>

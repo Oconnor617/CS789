@@ -61,31 +61,3 @@ def bsgs(g, h, p):
     # Solution not found
     return None
 
-def babyStep(g,h,p):
-    """Example: 22=5^x(mod53) so here
-    g=5
-    h=22
-    p=53
-    
-    or log2(3) in Z101 -> g=2, h=3, p=101"""
-    N = int(math.ceil(math.sqrt(p-1)))
-    print("N=")
-    print(N)
-    t={}
-
-    #babyStep
-    for i in range(N):
-        t[pow(g,i,p)]=i
-    print("Baby Step: ")
-    print(t)
-
-    #Fermat's Little Theorem
-    c = pow(g, N*(p-2),p)
-
-    for j in range(N):
-        y = (h * pow(c,j,p))%p
-        if y in t:
-            return j * N + t[y]
-    
-    return None # I found nothing
-
