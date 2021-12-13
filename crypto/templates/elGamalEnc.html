@@ -175,15 +175,33 @@
         </h1>
         <form id="EveAttack" method="post" action="{{ url_for('eve_attack_view') }}">
           <label for="Enter Encrypted Number"></label><br>
-          <input type="number" id="eve_num" name="eve_num" placeholder="Enter the Encrypted Message">
-          <input type="number" id="eve_bob_fake" name="eve_bob_fake" placeholder="Enter Bob's Fake Public Key: h=b^ly(modp)">
-          <input type="number" id="eve_attack_alice" name="eve_attack_alice" placeholder="Enter Alice's Public Key: h=b^r(modp)">
+          <input type="number" id="eve_num" name="eve_num" placeholder="Enter the Encrypted Message"><br>
+          <input type="number" id="eve_bob_fake" name="eve_bob_fake" placeholder="Enter Bob's Fake Public Key: h=b^ly(modp)"><br>
+          <input type="number" id="eve_attack_alice" name="eve_attack_alice" placeholder="Enter Alice's Public Key: h=b^r(modp)"><br>
           <input type="number" id="eve_p_attack" name="eve_p_attack" placeholder="Enter the Group: p"><br>
           <input type="submit" value="Submit to perform Eve's Attack">
         </form>
         {% if eve_dec %}
         <p>The Encrypted Message meant for Bob: {{eve_enc}}</p><br>
         <p>Eve's Decryption: {{eve_dec}}</p><br>
+        {% endif %}
+      </div>
+
+      <div>
+        <h1>Complete this form to perform Eve's Man in The Middle Attack via Discrete Log
+        </h1>
+        <form id="EveAttackBSGS" method="post" action="{{ url_for('eve_attack_bsgs_view') }}">
+          <label for="Enter Encrypted Number"></label><br>
+          <input type="number" id="eve_bsgs" name="eve_bsgs" placeholder="Enter the Encrypted Message"><br>
+          <input type="number" id="bob_bsgs" name="bob_bsgs" placeholder="Enter Bob's (the intended reciever) Public Key: h=b^l(modp)"><br>
+          <input type="number" id="alice_bsgs" name="alice_bsgs" placeholder="Enter Alice's (the senders) Public Key: h=b^r(modp)"><br>
+          <input type="number" id="p_bsgs" name="p_bsgs" placeholder="Enter the Group: p"><br>
+          <input type="number" id="g_bsgs" name="g_bsgs" placeholder="Enter the Generator: g"><br>
+          <input type="submit" value="Submit to perform Eve's Attack via BSGS">
+        </form>
+        {% if enc_bsgs %}
+        <p>The Encrypted Message meant for Bob: {{enc_bsgs}}</p><br>
+        <p>Eve's Decryption: {{dec_bsgs}}</p><br>
         {% endif %}
       </div>
   </body>

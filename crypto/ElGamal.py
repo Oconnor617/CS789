@@ -4,6 +4,8 @@ import random
 from math import pow
 from crypto.PrimRoots import *
 from crypto.PseudoRandoms import *
+from crypto.Helpers import *
+
 
 
 """This  is an implementation of the ElGamal Cipher Algorithm.
@@ -203,3 +205,11 @@ def eve_attack(enc_num,heb,ha,p):
     attempt2 = int(enc_num/attempt)
     print("My Attempt is {}".format(attempt2))
     return dec
+
+def eve_attack_bsgs(enc_num,ha,hb,p,g):
+    """Eve can attack by computing the decrete log on both public keys ha=g^r%p"""
+    r = bsgs(g,ha,p) #Alice's Secret Key
+    l = bsgs(g,hb,p)
+    crack = decrypt_num(enc_num,ha,l,p)
+    print("the crack message is: {}".format(crack))
+    return crack

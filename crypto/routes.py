@@ -1,6 +1,6 @@
 from werkzeug.utils import redirect
 from crypto import app
-from crypto.ElGamal import key_gen, encrypt, decrypt, key_gen_root, encrypt_num, decrypt_num, eve_key_gen, eve_attack
+from crypto.ElGamal import eve_attack_bsgs, key_gen, encrypt, decrypt, key_gen_root, encrypt_num, decrypt_num, eve_key_gen, eve_attack
 from crypto.Euclidean import *
 from crypto.Exponentiation import *
 from crypto.Helpers import *
@@ -239,6 +239,17 @@ def eve_attack_view():
         return render_template('elGamalEnc.html',eve_enc=num_enc,eve_dec=eve_dec)
     return render_template('elGamalEnc.html') #GET Request
 
+@app.route('/eve_attack_bsgs_view', methods=['GET','POST'])
+def eve_attack_bsgs_view():
+    if request.method == 'POST':
+        num_enc = int(request.form['eve_bsgs']) #Will be a number
+        ha = int(request.form['alice_bsgs'])
+        hb = int(request.form['bob_bsgs'])
+        g = int(request.form['g_bsgs'])
+        p = int(request.form['p_bsgs'])
+        eve_dec = eve_attack_bsgs(num_enc,ha,hb,p,g) 
+        return render_template('elGamalEnc.html',enc_bsgs=num_enc,dec_bsgs=eve_dec)
+    return render_template('elGamalEnc.html') #GET Request
 
 ###########################################################################
 # Routes for ElGamal Key Generation - including Eve's Fake Keys

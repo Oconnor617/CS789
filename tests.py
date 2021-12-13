@@ -4,7 +4,7 @@
     run the tests. It will make use of Python's unittest framework.
 """
 from crypto import app
-from crypto.ElGamal import decrypt_num, encrypt_num, key_gen
+from crypto.ElGamal import *
 from crypto.Euclidean import *
 from crypto.Exponentiation import *
 from crypto.Helpers import *
@@ -105,7 +105,9 @@ class FunctionTests(unittest.TestCase):
         enc_msg = encrypt_num(msg,bob_pub,alice_pri,group) #Encrypt a Message from Alice to Bob
         dec_msg = decrypt_num(enc_msg,alice_pub,bob_pri,group) #decrypt the message
         self.assertEqual(dec_msg,msg) #ensure the Encryption and Decryption worked
-
+        eve = eve_attack_bsgs(enc_msg,alice_pub,bob_pub,group,generator)
+        print(eve)
+        self.assertEqual(eve,msg)# we have confimred that Eve computed the Discrete Log via BSGS on the public keys
 
 if __name__ == '__main__':
     unittest.main(verbosity=2)
