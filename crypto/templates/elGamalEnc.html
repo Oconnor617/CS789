@@ -93,7 +93,8 @@
     </div>
 
     <div>
-      <h1>Complete this form below if you want to Decrypt a list where each entry represents a letter in a string</h1>
+      <h1>Complete this form below if you want to Decrypt a list where each entry represents a letter in a string<br>
+      If using the output of the form above please remove the "," after each number</h1>
       <form id="BoB" method="post" action="{{ url_for('elDec') }}">
         <label for="Enter the Encrypted Message for Decription"></label><br>
         <input type="text" id="msg_enc" name="msg_enc" placeholder="Enter the Encrypted Message"><br>
@@ -146,7 +147,7 @@
       </div>
 
       <h1>The two forms below can be used to simulate Eve's Man in the Middle Attack</h1>
-      <div>
+      <!-- <div>
         <h1>Complete this form to generate fake keys of Alice and Bob.
           <p>If Alice and Bob's Public Keys are of the form b^r and B^l (where r & l are their Private Keys)<br>
             then Eve's fake keys will have the form Fake Alice: b^rx and Fake Bob: b^ly, <br>where x,y are Eve's Private Keys
@@ -185,7 +186,7 @@
         <p>The Encrypted Message meant for Bob: {{eve_enc}}</p><br>
         <p>Eve's Decryption: {{eve_dec}}</p><br>
         {% endif %}
-      </div>
+      </div>-->
 
       <div>
         <h1>Complete this form to perform Eve's Man in The Middle Attack via Discrete Log
