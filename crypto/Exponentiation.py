@@ -18,19 +18,19 @@ def FastModExo(x,e,m):
     X = x  #For the first step the working Base is the orginal
     E = e  #Start with the orginal Exponent
     Y = 1  #From definition of the Algorithm
-    print(m)
-    print("x   e     y")
-    print("{}  {}  {}".format(X,E,Y))
+    #print(m)
+    #print("x   e     y")
+    #print("{}  {}  {}".format(X,E,Y))
     while E>0: #The Algorithm stops when the exponent is 0
         #Now check for E's parity
         if E % 2 == 0: #Even E
             X = (X*X)%m
             E = E/2
-            print("{}  {}  {}".format(X,E,Y))
+            #print("{}  {}  {}".format(X,E,Y))
         else: #Odd E
             Y = (X*Y)%m
             E = E-1
-            print("{}  {}  {}".format(X,E,Y))
+            #print("{}  {}  {}".format(X,E,Y))
     return Y # At the End when E=0 the resultant Y is our anwser
 
 def primeFactor(n):

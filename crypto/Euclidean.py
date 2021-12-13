@@ -16,8 +16,8 @@ def GCD(m,n):
         return m
     r = int (m%n) #going to replace m as the new number
     q = floor(m/n) #q is the number of time n divides m evenly and r above is the remainder
-    print("{} = {} * {} + {}" .format(m,q,n,r))
-    print()
+    #print("{} = {} * {} + {}" .format(m,q,n,r))
+    #print()
     return GCD(n,r) # Recursive step with n as the new m and r as the new n
 
 def ExtendedGDC(m,n):

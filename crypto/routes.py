@@ -376,6 +376,7 @@ def pollard():
         n = int(request.form['pol'])
         #get p and q from Pollards function
         p,q= pollard_result(n)
+        print("The Prime factors of {} are {} and {}".format(n,p,q))
         return render_template('index.html', npol=n,ppol=p,qpol=q)
     return render_template('index.html')# GET Request
 

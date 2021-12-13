@@ -59,5 +59,5 @@ def bsgs(g, h, p):
             return j * N + tbl[y]
 
     # Solution not found
-    return None
+    return -1
 
