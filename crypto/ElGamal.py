@@ -207,9 +207,17 @@ def eve_attack(enc_num,heb,ha,p):
     return dec
 
 def eve_attack_bsgs(enc_num,ha,hb,p,g):
-    """Eve can attack by computing the decrete log on both public keys ha=g^r%p"""
-    r = bsgs(g,ha,p) #Alice's Secret Key
-    l = bsgs(g,hb,p)
-    crack = decrypt_num(enc_num,ha,l,p)
-    print("the crack message is: {}".format(crack))
+    """Eve can attack by computing the decrete log on both public keys ha=g^r%p. Inputs:
+        enc-num: The encrypted message that Alice sent to Bob using Bob's Public Key
+        ha: Alice's Public Key
+        hb: Bob's Public Key
+        g: generator/Primitive root of p
+        p: the modulus
+    Eve will use the Baby-Step Giant-Step Algorithm to compute the Discrete Log and obtain r&l the Private Keys for Alice and Bob.
+    From there she should be able to decrypt the encrypted message or any mesasge between the two
+    """
+    r = bsgs(g,ha,p) #Alice's Secret Key - Do I need this if just decrypting alice->bob
+    l = bsgs(g,hb,p) # l Bob's secret key
+    crack = decrypt_num(enc_num,ha,l,p) # if we know the recievers secret key just use the Decryption algorithm above
+    print("the cracked message is: {}".format(crack))
     return crack
