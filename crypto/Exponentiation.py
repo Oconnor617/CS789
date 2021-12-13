@@ -42,9 +42,11 @@ def primeFactor(n):
                 if i is not a divisor of n: set i = i + 2 and repeat 2)
             3) if n is prime && n>2 it will not become 1 via 1) & 2) so print n. 
     """
+    factors = []
     # Start with the lowest Prime. Print the number of time 2 divides n
     while (n%2 == 0):
         print (2)
+        factors.append(2)
         n = n/2
     # once the while loop is over n must now be odd
     # we also know 2 is no longer a divisor so we want to do a loop that skips 2
@@ -53,9 +55,11 @@ def primeFactor(n):
         #now start step 2)
         while (n%i == 0): #is i a divisor of n?
             print(i)
+            factors.append(i)
             n = n/i
         # if the while loop condition is not met then i = i+2 via the step in the for loop
     # step 3)
     if n>2:
         print(n) # this must be a prime larger than 2
-
+        factors.append(n)
+    return factors

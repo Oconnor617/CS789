@@ -91,8 +91,9 @@ def roots():
 def rootsList():
     if request.method == 'POST':
         modulo = int(request.form['listroots'])
-        print("The Primitive Roots are: {}".format(primRoots(modulo)))
-        return redirect(url_for('index'))
+        rootlist = primRoots(modulo)
+        print("The Primitive Roots are: {}".format(rootlist))
+        return render_template('index.html',rootlist=rootlist)
     return render_template('index.html')
 
 @app.route('/prime', methods=['GET', 'POST'])
@@ -113,8 +114,9 @@ def prime():
 def primeFactorRoute():
     if request.method == 'POST':
         n = int(request.form['nFactor'])
-        primeFactor(n)
-        return redirect(url_for('index'))
+        factors = primeFactor(n)
+        print(factors)
+        return render_template('index.html',factors=factors)
     return render_template('index.html') # its a GET request. no form submitted
 
 

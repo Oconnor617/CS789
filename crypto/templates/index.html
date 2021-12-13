@@ -91,6 +91,11 @@
             <input type="number" id="prime" name="nFactor" placeholder="Enter a Number for Prime Factorization"><br>
             <input type="submit" value="Check Prime Factor">
         </form>
+        <p>
+            {% for f in factors%}
+            <b>{{f}}</b>
+            {% endfor %}
+        </p>
     </div><br>
 
     <div>
@@ -128,6 +133,11 @@
             <input type="number" id="listroots" name="listroots" placeholder="Enter a Number: Output will be a list of the Primitive Roots"><br>
             <input type="submit" value="Find roots">
         </form>
+        <p>
+            {% for p in rootlist %}
+            <b>{{p}}</b>
+            {% endfor %}
+        </p>
         </div>
 
     <div>
