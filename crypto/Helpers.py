@@ -40,22 +40,26 @@ def primeRoots(modulo):
     return roots
 
 def bsgs(g, h, p):
-    '''
-    Solve for x in h = g^x mod p given a prime p.
-    If p is not prime, you shouldn't use BSGS anyway.
-    '''
-    N = math.ceil(math.sqrt(p - 1))  # phi(p) is p-1 if p is prime
+    """This function will solve for x in h = g^x mod p given a prime p. If p is not prime, you shouldn't use BSGS anyway.
+    The inputs are g: Generator/base h: Solution and p: the prime modulus
+    """
+    #if not isPrimeMR(p):# P is not prime
+    #    print("Not a prime modulus. You should not use BSGS")
+    #    return -1
+    phi = p-1 # phi(p) is p-1 if p is prime
+    N = math.ceil(math.sqrt(phi))  # phi(p) is p-1 if p is prime
 
-    # Store hashmap of g^{1...m} (mod p). Baby step.
+    # Store hashmap of g^{1...m} (mod p). Baby step. Dictionary means we can search in O(1) not O(logn)
+    # This should take sqrt(phi) steps
     tbl = {pow(g, i, p): i for i in range(N)}
 
     # Precompute via Fermat's Little Theorem
-    c = pow(g, N * (p - 2), p)
+    c = pow(g, N * (p - 2), p) #c=(g^-1)^p Step 3 from the notes
 
     # Search for an equivalence in the table. Giant step.
     for j in range(N):
         y = (h * pow(c, j, p)) % p
-        if y in tbl:
+        if y in tbl: #Found a match in the table
             return j * N + tbl[y]
 
     # Solution not found

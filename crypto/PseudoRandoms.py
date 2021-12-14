@@ -85,10 +85,11 @@ def miller_rabin(n):
             return False"""
     return True #it "passed" all 8 runs so it must be Prime
 
-def gen_random_prime(size=100000000000000):
+def gen_random_prime(size=100000000000):
     """This should genreate and return a random Prime number. It basis for deteriming Primality is the MillerRabin test"""
     while True: # an Infinite Loop!
         rand = random.randrange(size)
+        #rand2 = random.randrange(2**50)
         if isPrimeMR(rand):
             return rand
 
